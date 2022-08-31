@@ -1,0 +1,1 @@
+Timski razvijena aplikacija za potrebe predmeta Softversko Inženjerstvo. Predstavlja web aplikaciju za studentsku saradnju, informisanje i pripremu ispita. Tehnologije korišćene u izradi: Angular, ASP.NET, EF Core, SQL Server.
