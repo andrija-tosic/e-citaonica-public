@@ -1,0 +1,48 @@
+<div>
+  <input
+    matInput
+    #input
+    class="search-input"
+    matInputAutofocus
+    placeholder="Pretraga"
+    type="text"
+    (keyup)="this.unos.next($any($event).target.value)" />
+  <div>
+    <div class="studenti-cont" *ngIf="preporuke?.length && preporukeLoaded">
+      <div class="overflow-cont">
+        <div *ngFor="let student of preporuke">
+          <preporuka-card
+            [student]="student"
+            [added]="false"
+            (onAdd)="odaberi($event)"></preporuka-card>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!preporukeLoaded" [style]="{ color: 'gray' }">
+      Učitavaju se predlozi...
+    </div>
+    <spinner [showSpinner]="!preporukeLoaded"></spinner>
+  </div>
+  <div *ngIf="odabrani?.length" class="studenti-cont">
+    <small [style]="{ color: 'gray' }"
+      >O Vašoj diskusiji biće obavešteni...</small
+    >
+    <div class="overflow-cont">
+      <div *ngFor="let student of odabrani">
+        <preporuka-card
+          [added]="true"
+          (onRemove)="ukloni($event)"
+          [student]="student">
+        </preporuka-card>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="primary" (click)="onConfirm()">
+      Sačuvaj
+    </button>
+    <button mat-stroked-button color="primary" (click)="onDismiss()">
+      Poništi
+    </button>
+  </div>
+</div>

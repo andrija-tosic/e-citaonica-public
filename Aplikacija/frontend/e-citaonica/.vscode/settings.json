@@ -1,0 +1,9 @@
+{
+  "appService.zipIgnorePattern": [
+    ".angular",
+    "dist",
+    "node_modules",
+    ".vscode"
+  ],
+  "appService.defaultWebAppToDeploy": "None"
+}

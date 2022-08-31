@@ -1,0 +1,19 @@
+.chips-form {
+  width: 100%;
+}
+
+.chips-container {
+  padding-bottom: 15px;
+}
+
+.selected-chip {
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  margin-right: 5px;
+  margin-left: -5px;
+}
+
+.chip {
+  cursor: pointer;
+}

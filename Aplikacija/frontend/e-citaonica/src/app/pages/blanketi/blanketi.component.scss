@@ -1,0 +1,57 @@
+mat-form-field {
+  width: 100%;
+}
+
+.chips-form {
+  width: 100%;
+}
+
+.options-container {
+  margin-bottom: 10px;
+}
+
+.chips-container {
+  padding-bottom: 15px;
+}
+
+.selected-chip {
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  margin-right: 5px;
+  margin-left: -5px;
+}
+
+.chip {
+  cursor: pointer;
+}
+
+.slajder {
+  width: 20em;
+}
+
+blanket-preview {
+  flex: 85%;
+}
+
+.blanketi {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  // gap: 2em;
+  margin-top: 1em;
+}
+
+.godine {
+  display: flex;
+  flex: 15%;
+  flex-direction: column;
+  gap: 2em;
+  padding: 1em;
+}
+
+.blanket-container {
+  display: flex;
+  justify-content: center;
+  flex-grow: 3;
+}

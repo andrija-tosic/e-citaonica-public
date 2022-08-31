@@ -1,0 +1,145 @@
+<div
+  [class]="{
+    'page-container': true,
+    'desktop-content': !(isHandset$ | async)
+  }">
+  <div class="form-container">
+    <mat-card class="mat-elevation-z8">
+      <div class="logo-container">
+        <img
+          src="../../../assets/e-citaonica-logo.svg"
+          class="e-citaonica-logo"
+          alt="Logo" />
+        <h1>e-Čitaonica</h1>
+      </div>
+
+      <form
+        [formGroup]="form"
+        #formDirective="ngForm"
+        (submit)="onSubmit(formDirective)">
+        <mat-card-content>
+          <div class="form-fields-container">
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="ime"
+                type="text"
+                placeholder="" />
+              <mat-label>Ime</mat-label>
+              <mat-error>Ime je obavezno</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="prezime"
+                type="text"
+                placeholder="" />
+              <mat-label>Prezime</mat-label>
+              <mat-error>Prezime je obavezno</mat-error>
+            </mat-form-field>
+            <mat-checkbox
+              formControlName="isProfesor"
+              color="primary"
+              (change)="profesorCheckChanged()">
+              Ja sam profesor</mat-checkbox
+            >
+            <div class="embedded-form-container">
+              <mat-form-field appearance="outline" class="student-inputi">
+                <input
+                  matInput
+                  formControlName="indeks"
+                  type="number"
+                  min="1000"
+                  placeholder="Broj indeksa" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="student-inputi">
+                <mat-label>Modul</mat-label>
+                <mat-select formControlName="modul">
+                  <mat-option
+                    *ngFor="let modul of moduli | async"
+                    value="{{ modul.id }}"
+                    >{{ modul.naziv }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="student-inputi">
+                <mat-label>Godina</mat-label>
+                <mat-select formControlName="godina">
+                  <mat-option *ngIf="jeOpsti()" value="1">1</mat-option>
+                  <mat-option *ngIf="!jeOpsti()" value="2">2</mat-option>
+                  <mat-option *ngIf="!jeOpsti()" value="3">3</mat-option>
+                  <mat-option *ngIf="!jeOpsti()" value="4">4</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="email"
+                type="email"
+                placeholder="ime.prezime@elfak.rs" />
+              <mat-label>Email</mat-label>
+              <mat-error *ngIf="this.form.controls['email'].invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="password"
+                type="password"
+                placeholder="********" />
+              <mat-label>Lozinka</mat-label>
+              <mat-error
+                ><span *ngIf="form.get('password')?.errors?.['minlength']"
+                  >Lozinka mora sadržati najmanje 8 karaktera</span
+                ></mat-error
+              >
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="passwordRep"
+                type="password"
+                placeholder="********" />
+              <mat-label>Ponovo unesite lozinku</mat-label>
+              <mat-error *ngIf="!lozinkeSePoklapaju"
+                >Lozinke se ne poklapaju</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="login-button">
+          Registruj se
+        </button>
+      </form>
+
+      <div class="logo-container" style="margin-top: 1em">
+        <h3>Već imate nalog?</h3>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        class="login-button"
+        routerLink="/login"
+        type="button">
+        Prijavite se
+      </button>
+
+      <div class="sso-options-container">
+        <div>Ili se prijavite sa</div>
+        <button mat-stroked-button class="sso-dugme" (click)="onOpenId()">
+          <img
+            src="../../../assets/Microsoft_Office_logo_(2019–present).svg"
+            width="40px"
+            height="40px" />
+          Office 365
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

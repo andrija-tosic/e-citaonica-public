@@ -1,0 +1,19 @@
+.studenti-cont {
+  border-radius: 1em;
+  border: 1px solid var(--gray-shade);
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.search-input {
+  border-radius: 1em;
+  box-sizing: border-box;
+  border: 1px solid var(--gray-shade);
+  padding: 8px;
+  margin: 6px 0;
+}
+
+.overflow-cont {
+  max-height: 300px;
+  overflow: auto;
+}

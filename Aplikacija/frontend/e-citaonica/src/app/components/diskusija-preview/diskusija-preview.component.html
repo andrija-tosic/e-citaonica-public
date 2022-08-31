@@ -1,0 +1,144 @@
+<div
+  *ngIf="showPredmet"
+  fxLayoutAlign="start center"
+  style="gap: 0.33em"
+  class="parent-cont outline-card-white"
+  routerLink="/predmet/{{ diskusija?.predmet?.id }}">
+  <predmet-icon
+    diameter="2em"
+    [predmet]="$any(diskusija?.predmet)"
+    fontSize="11px"></predmet-icon>
+  <span
+    [style]="{
+      'white-space': 'nowrap'
+    }"
+    class="hover-underline"
+    >{{ diskusija?.predmet?.naziv }}</span
+  >
+</div>
+<div>
+  <mat-card
+    class="diskusija-card outline-card-white"
+    [class.potvrdjen]="this.diskusija?.zavrsena"
+    [class.showPredmet]="showPredmet">
+    <mat-card-title-group>
+      <mat-card-title
+        class="user-info-container"
+        routerLink="/korisnik/{{ diskusija.autor?.id }}">
+        <mat-icon
+          *ngIf="diskusija?.autor?.slikaURL === ''"
+          class="user-img-icon material-icons-outlined"
+          >account_circle</mat-icon
+        >
+        <img
+          class="user-img"
+          *ngIf="diskusija?.autor?.slikaURL !== ''"
+          [src]="diskusija?.autor?.slikaURL" />
+        <span class="autor-username"> {{ diskusija.autor?.ime }}</span>
+      </mat-card-title>
+
+      <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="10px">
+        <div *ngIf="this.diskusija?.arhivirana">
+          <mat-icon
+            matTooltip="Diskusija je arhivirana"
+            [style]="{ color: '#E1AD01' }"
+            >lock</mat-icon
+          >
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="5px">
+          <mat-icon
+            matTooltip="Diskusija ima potvrđeno rešenje"
+            *ngIf="diskusija?.zavrsena"
+            color="primary">
+            done_all
+          </mat-icon>
+          <a class="diskusija-link" (click)="navigacijaKaDiskusiji()">
+            <h4 [style]="{ color: 'gray' }">
+              {{ diskusija.datumKreiranja | prettyDate }}
+            </h4>
+          </a>
+        </div>
+      </div>
+    </mat-card-title-group>
+    <mat-card-title
+      (click)="navigacijaKaDiskusiji()"
+      class="diskusija-link"
+      style="margin-top: 0.5em; line-height: 1"
+      >{{ diskusija.naslov }}</mat-card-title
+    >
+    <mat-card-content>
+      <span
+        style="font-weight: bold"
+        *ngFor="let oblast of diskusija.oblasti; let i = index">
+        {{ oblast.naziv
+        }}<span *ngIf="i !== (diskusija.oblasti?.length || 0) - 1">,</span>
+      </span>
+    </mat-card-content>
+
+    <mat-divider inset></mat-divider>
+
+    <div
+      class="diskusija-link"
+      (click)="navigacijaKaDiskusiji()"
+      *ngIf="diskusija?.tip == 'zadatak'">
+      <mat-card-content style="margin-top: 1em">
+        <zadatak
+          [sliceLength]="156"
+          [zadatak]="diskusija.zadatak!"
+          [hasPokreni]="false"></zadatak>
+        <mat-divider inset></mat-divider>
+      </mat-card-content>
+    </div>
+
+    <mat-card-content class="height-limit" #quillRef>
+      <div [class.gradijent]="canCheck && checkOverflow(quillRef)">
+        <quill-view-html [content]="diskusija.sadrzaj"></quill-view-html>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <button
+            matTooltip="Zahvalite se kolegi"
+            mat-button
+            class="margin-reduced"
+            [color]="diskusija.zahvaljena ? 'accent' : ''"
+            (click)="onZahvaljenaClick()">
+            <mat-icon
+              *ngIf="diskusija?.zahvaljena; else nezahvaljena"
+              color="accent"
+              class="like-icon">
+              lightbulb
+            </mat-icon>
+            <ng-template #nezahvaljena>
+              <mat-icon color="primary" class="like-icon hov"
+                >lightbulb_outline</mat-icon
+              >
+            </ng-template>
+            {{ diskusija.brZahvalnica }}
+          </button>
+          <button (click)="onComment()" mat-button class="margin-reduced">
+            <mat-icon color="primary" class="material-icons-outlined">
+              comment
+            </mat-icon>
+            {{ diskusija.brKomentara }}
+          </button>
+        </div>
+        <div>
+          <button
+            mat-button
+            (click)="onPracenaChange()"
+            [color]="diskusija.pracena ? 'accent' : ''">
+            <mat-icon *ngIf="!diskusija.pracena" class="margin-reduced"
+              >notifications_none</mat-icon
+            >
+            <mat-icon *ngIf="diskusija.pracena" class="margin-reduced"
+              >notifications</mat-icon
+            >
+          </button>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

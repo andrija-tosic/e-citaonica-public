@@ -1,0 +1,11 @@
+<div>
+  <h2 style="display: flex; align-items: center">
+    <mat-icon color="warn">priority_high</mat-icon> Upozorenje
+  </h2>
+</div>
+<h3 mat-dialog-title>{{ this.data.title }}</h3>
+
+<div mat-dialog-actions class="buttons">
+  <button mat-raised-button color="primary" (click)="onConfirm()">Da</button>
+  <button mat-stroked-button (click)="onDismiss()">Ne</button>
+</div>

@@ -1,0 +1,83 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Promenite sliku svog profila</h1>
+  <div class="wrapper">
+    <div class="slika-actions">
+      <div class="dugme">
+        <input
+          hidden="true"
+          #fileInput
+          onclick="this.value=null"
+          type="file"
+          (change)="onFileChanged($event)" />
+
+        <button
+          [disabled]="this.uploading$ | async"
+          (click)="fileInput.click()"
+          mat-raised-button>
+          <mat-icon>file_upload</mat-icon> Otpremi sliku
+        </button>
+      </div>
+      <div class="dugme">
+        <button
+          [disabled]="!this.slikaURL || (this.uploading$ | async)"
+          mat-raised-button
+          (click)="obrisiSliku()">
+          <mat-icon class="material-icons-outlined">delete</mat-icon> Obriši
+          sliku
+        </button>
+      </div>
+    </div>
+
+    <div
+      style="
+        width: 16em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      ">
+      <mat-icon
+        class="user-icon"
+        mat-card-sm-image
+        *ngIf="this.slikaURL === '' && this.user.tip == 'student'">
+        school
+      </mat-icon>
+
+      <mat-icon
+        class="user-icon"
+        mat-card-sm-image
+        *ngIf="
+          this.slikaURL === '' &&
+          (this.user.tip === 'profesor' || this.user.tip === 'administrator')
+        ">
+        account_circle
+      </mat-icon>
+
+      <img
+        class="user-img"
+        *ngIf="this.slikaURL !== ''"
+        mat-card-sm-image
+        [src]="this.slikaURL" />
+    </div>
+  </div>
+
+  <mat-progress-bar
+    *ngIf="this.uploading$ | async"
+    mode="determinate"
+    [value]="(loader.value$ | async)! * 3"></mat-progress-bar>
+
+  <div mat-dialog-actions class="buttons">
+    <button
+      [disabled]="this.uploading$ | async"
+      mat-raised-button
+      color="primary"
+      (click)="onConfirm()">
+      Sačuvaj
+    </button>
+    <button
+      [disabled]="this.uploading$ | async"
+      mat-stroked-button
+      (click)="onDismiss()">
+      Zatvori
+    </button>
+  </div>
+</div>

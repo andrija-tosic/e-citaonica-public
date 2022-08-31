@@ -1,0 +1,43 @@
+<mat-card class="mat-elevation-z0 outline-card">
+  <mat-form-field class="chips-form">
+    <div class="chips-container">
+      <h2 class="brown-text">Oblasti</h2>
+      <mat-chip-list selectable multiple>
+        <mat-chip
+          #chip="matChip"
+          *ngFor="let oblast of (this.predmet$ | async)?.oblasti"
+          (click)="selektujOblast(chip, oblast)"
+          [selected]="matChipSelected(oblast)"
+          class="chip">
+          <mat-icon class="selected-chip" *ngIf="chip.selected">check</mat-icon>
+          {{ oblast.naziv }}
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <div class="chips-container">
+      <h2 class="brown-text">Tip</h2>
+      <mat-chip-list selectable multiple>
+        <mat-chip
+          #chipZadatak="matChip"
+          (click)="selektujTip(chipZadatak, 'zadatak')"
+          [selected]="matChipSelectedTip('zadatak')"
+          class="chip">
+          <mat-icon class="selected-chip" *ngIf="chipZadatak.selected"
+            >check</mat-icon
+          >
+          Zadatak
+        </mat-chip>
+        <mat-chip
+          #chipPitanje="matChip"
+          (click)="selektujTip(chipPitanje, 'pitanje')"
+          [selected]="matChipSelectedTip('pitanje')"
+          class="chip">
+          <mat-icon class="selected-chip" *ngIf="chipPitanje.selected"
+            >check</mat-icon
+          >
+          Pitanje
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </mat-form-field>
+</mat-card>

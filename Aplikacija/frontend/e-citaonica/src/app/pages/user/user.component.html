@@ -1,0 +1,151 @@
+<div [class]="{ content: !(isHandset$ | async), 'page-container': true }">
+  <div class="inner-page-container">
+    <mat-card class="outline-card">
+      <spinner [showSpinner]="!(this.user$ | async)"></spinner>
+      <div *ngIf="this.user$ | async" class="wrapper">
+        <div
+          [class]="{
+            'user-icon-wrapper': true,
+            'logged-in-user':
+              (this.user$ | async)?.id === (this.loggedUser | async)?.id
+          }">
+          <div class="user-icon-img">
+            <img
+              class="user-img"
+              *ngIf="(this.user$ | async)?.slikaURL !== ''"
+              mat-card-sm-image
+              [src]="(this.user$ | async)?.slikaURL" />
+
+            <mat-icon
+              class="user-icon material-icons-outlined"
+              mat-card-sm-image
+              *ngIf="
+                (this.user$ | async)?.slikaURL === '' &&
+                ((this.user$ | async)?.tip === 'profesor' ||
+                  (this.user$ | async)?.tip === 'administrator')
+              ">
+              account_circle
+            </mat-icon>
+
+            <mat-icon
+              class="user-icon material-icons-outlined"
+              mat-card-sm-image
+              *ngIf="
+                (this.user$ | async)?.slikaURL === '' &&
+                (this.user$ | async)?.tip == 'student'
+              ">
+              school
+            </mat-icon>
+          </div>
+          <div class="buttons">
+            <button
+              mat-raised-button
+              (click)="this.izmenaSlike()"
+              *ngIf="
+                (this.user$ | async)?.id === (this.loggedUser | async)?.id
+              ">
+              <mat-icon class="material-icons-outlined">add_a_photo</mat-icon>
+              Podesi sliku
+            </button>
+
+            <button
+              mat-raised-button
+              (click)="this.promenaLozinke()"
+              *ngIf="
+                (this.user$ | async)?.id === (this.loggedUser | async)?.id &&
+                this.authService.tokenIssuer !== 'microsoft'
+              ">
+              <mat-icon>password</mat-icon>
+              Promena lozinke
+            </button>
+
+            <button
+              mat-raised-button
+              *ngIf="(this.user$ | async)?.id === (this.loggedUser | async)?.id"
+              (click)="this.authService.logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Odjava</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <mat-card-title-group>
+            <mat-card-title>{{ (this.user$ | async)?.ime }}</mat-card-title>
+            <mat-card-subtitle
+              >{{ (this.user$ | async)?.tip | titlecase }}
+              <ng-container *ngIf="(this.user$ | async)?.tip === 'student'">
+                <span> {{ $any(this.user$ | async)?.godina }}. godine </span>
+                <br />
+                <span>
+                  {{ $any(this.user$ | async)?.indeks }}
+                </span>
+              </ng-container>
+            </mat-card-subtitle>
+            <mat-card-subtitle *ngIf="(this.user$ | async)?.tip === 'student'"
+              >Modul - {{ $any(this.user$ | async)?.modul }}</mat-card-subtitle
+            >
+          </mat-card-title-group>
+          <div class="statistika">
+            <span>
+              Broj diskusija: {{ (this.user$ | async)?.brDiskusija }}
+            </span>
+            <span> Broj rešenja: {{ (this.user$ | async)?.brResenja }} </span>
+            <span>
+              Broj zahvalnica: {{ (this.user$ | async)?.brZahvalnica }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <mat-card-content *ngIf="(this.user$ | async)?.tip === 'profesor'">
+        <h4>Predmetni profesor na predmetima:</h4>
+        <div
+          [class]="{
+            predmeti: true,
+            'predmeti-mobile': (isHandset$ | async)!
+          }">
+          <predmet-card
+            *ngFor="let predmet of $any(this.user$ | async)?.predmeti"
+            [routerLink]="['/predmet', predmet.id]"
+            [predmet]="predmet"
+            [isVertical]="(isHandset$ | async)!">
+          </predmet-card>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div style="margin-top: 1em">
+      <spinner [showSpinner]="!(this.user$ | async)?.objave"></spinner>
+
+      <h2 *ngIf="(this.user$ | async)?.diskusije?.length! > 0">
+        Diskusije u kojima je {{ (this.user$ | async)?.ime }} učestvovao
+      </h2>
+
+      <h2 *ngIf="(this.user$ | async)?.diskusije?.length! === 0">
+        {{ (this.user$ | async)?.ime }} još nije učestvovao ni u jednoj
+        diskusiji.
+      </h2>
+      <div
+        class="container"
+        infiniteScroll
+        [infiniteScrollDistance]="1"
+        [infiniteScrollThrottle]="5"
+        [infiniteScrollContainer]="'.mat-sidenav-content'"
+        [fromRoot]="true"
+        (scrolled)="onScrollDown()">
+        <ng-container *ngFor="let objava of objave">
+          <diskusija-preview
+            *ngIf="isDiskusija(objava); else komentar"
+            [diskusija]="$any(objava)"
+            [showPredmet]="true">
+          </diskusija-preview>
+          <ng-template #komentar>
+            <comment
+              [comment]="$any(objava)"
+              [showDiskusija]="true"
+              [hideOptions]="true"></comment>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

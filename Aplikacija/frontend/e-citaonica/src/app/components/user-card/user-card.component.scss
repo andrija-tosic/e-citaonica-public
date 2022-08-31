@@ -1,0 +1,106 @@
+@use '@angular/material' as mat;
+
+.rezultat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 1em;
+  // text-align: center;
+  cursor: pointer;
+  gap: 1em;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.card-ikonica {
+  display: flex;
+  justify-content: center;
+  font-size: 5em;
+  width: 1em;
+  height: 1em;
+}
+
+.mobile-ikonica {
+  font-size: 3em;
+}
+
+.user-img {
+  width: 5em;
+  height: 5em;
+}
+
+.user-img-mobile {
+  width: 3em;
+  height: 3em;
+}
+
+.rezultat-card {
+  &:hover {
+    @include mat.elevation(12);
+  }
+}
+
+.regular-card {
+  width: 10em;
+}
+
+.vertical-card {
+  height: fit-content;
+  margin: 0;
+  align-items: flex-start;
+}
+
+.vertical-container {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  overflow: hidden;
+}
+
+.rezultat-card img {
+  border-radius: 50%;
+}
+
+::ng-deep .mat-card-header {
+  flex-direction: column !important;
+}
+
+.header-bottom {
+  margin-left: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-text {
+  margin-bottom: 0;
+}
+
+.email-btn-container {
+  width: 100%;
+  display: flex;
+}
+
+.email-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.email {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.email-mobile-container {
+  margin-left: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.2em;
+}

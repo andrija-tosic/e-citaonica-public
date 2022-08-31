@@ -1,0 +1,28 @@
+.card-cont {
+  border-radius: 1em;
+  border: 1px solid var(--primary);
+  margin: 5px 2px;
+  padding: 5px;
+}
+
+.toggle:hover {
+  cursor: pointer;
+}
+
+.user-img {
+  object-fit: cover;
+  margin-top: 5px;
+  margin-left: 5px;
+  height: 35px;
+  font-size: 40px;
+  width: 35px;
+  border-radius: 50%;
+}
+
+.value {
+  color: var(--primary);
+}
+
+.info-container {
+  margin-top: 5px;
+}

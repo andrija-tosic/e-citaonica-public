@@ -1,0 +1,52 @@
+.dialog {
+  min-height: 24em;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+@media only screen and (max-width: 1000px) {
+  .wrapper {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+.slika-actions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.dugme {
+  padding: 0.5em;
+}
+
+.dugme button {
+  width: 10em;
+}
+
+.user-icon {
+  font-size: 10em;
+  width: 1em;
+}
+
+.user-img {
+  object-fit: cover;
+
+  width: 16em;
+  height: 16em;
+  border-radius: 50%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}

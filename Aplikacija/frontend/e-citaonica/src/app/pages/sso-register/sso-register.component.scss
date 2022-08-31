@@ -1,0 +1,53 @@
+.page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.form-container {
+  width: min(100%, 480px);
+}
+
+.form-fields-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-button {
+  width: 100%;
+  padding: 5px;
+}
+
+.options {
+  margin-top: 15px;
+  display: flex;
+  justify-content: right;
+}
+
+.sso-options-container {
+  padding: 15px;
+  text-align: center;
+  color: var(--gray-shade);
+}
+
+.sso-option {
+  margin-top: 15px;
+  border-radius: 100%;
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+  background-color: var(--gray-light);
+  fill: #fafafa;
+  transition: 0.4s;
+}
+
+.sso-option:hover {
+  fill: #e64a19;
+  background-color: #fafafa;
+}
+
+.icon {
+  display: inline-block;
+}

@@ -1,0 +1,331 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <mat-card
+      [class.potvrdjen]="this.diskusija?.zavrsena"
+      class="outline-card-white">
+      <mat-card-title-group>
+        <div
+          fxLayout
+          fxLayoutAlign="space-between center"
+          class="full-width header-options">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            fxLayoutGap="7px"
+            fxFlex="1 1 100%">
+            <a routerLink="/korisnik/{{ diskusija?.autor?.id }}">
+              <div
+                *ngIf="!diskusijaLoaded"
+                fxLayout="row"
+                fxLayoutAlign="center end">
+                <ngx-skeleton-loader
+                  appearance="circle"
+                  width="2em"
+                  height="2em"></ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    width: '150px',
+                    height: '1.4rem',
+                    'margin-left': '0.5em'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+
+              <div *ngIf="diskusijaLoaded">
+                <div
+                  class="autor-username user-info-container"
+                  fxLayoutAlign="center center">
+                  <mat-icon
+                    *ngIf="diskusija?.autor?.slikaURL === ''"
+                    class="user-img material-icons-outlined"
+                    >account_circle</mat-icon
+                  >
+                  <img
+                    mat-card-sm-image
+                    class="user-img"
+                    *ngIf="diskusija?.autor?.slikaURL !== ''"
+                    [src]="diskusija?.autor?.slikaURL" />
+                  <span class="autor-username">
+                    {{ diskusija?.autor?.ime }}
+                  </span>
+                </div>
+              </div>
+            </a>
+
+            <div
+              fxLayout="row"
+              fxLayoutAlign="center center"
+              fxLayoutGap="10px">
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                *ngIf="this.diskusija?.arhivirana">
+                <!-- <span [style]="{ color: 'gray' }">Arhivirana</span> -->
+                <mat-icon
+                  matTooltip="Diskusija je arhivirana"
+                  [style]="{ color: '#E1AD01' }"
+                  >lock</mat-icon
+                >
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="0.5em">
+                <mat-icon
+                  matTooltip="Diskusija ima potvrđen odgovor"
+                  *ngIf="diskusija?.zavrsena"
+                  color="primary">
+                  done_all
+                </mat-icon>
+                <span
+                  [style]="{ color: 'gray' }"
+                  [matTooltip]="(diskusija?.datumKreiranja | date)!">
+                  {{ diskusija?.datumKreiranja | prettyDate }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div>
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
+                <button
+                  *ngIf="
+                    AUTORIZACIJA_DISABLED ||
+                    (this.user$ | async)?.tip === 'administrator' ||
+                    (this.user$ | async)?.id === diskusija?.autor?.id
+                  "
+                  mat-menu-item
+                  (click)="onIzmeniClick()">
+                  <mat-icon class="material-icons-outlined">edit</mat-icon>
+                  <span>Izmeni</span>
+                </button>
+                <button
+                  *ngIf="
+                    AUTORIZACIJA_DISABLED ||
+                    profesorPredmeta() ||
+                    (this.user$ | async)?.tip === 'administrator'
+                  "
+                  mat-menu-item
+                  (click)="onArhivirajClick()">
+                  <div *ngIf="!this.diskusija?.arhivirana">
+                    <mat-icon color="primary" class="material-icons-outlined"
+                      >archive</mat-icon
+                    >
+                    <span>Arhiviraj</span>
+                  </div>
+                  <div *ngIf="this.diskusija?.arhivirana">
+                    <mat-icon color="primary" class="material-icons-outlined"
+                      >unarchive</mat-icon
+                    >
+                    <span>Dearhiviraj</span>
+                  </div>
+                </button>
+                <button
+                  *ngIf="
+                    AUTORIZACIJA_DISABLED ||
+                    (this.user$ | async)?.tip === 'administrator' ||
+                    this.profesorPredmeta() ||
+                    (this.user$ | async)?.id === diskusija?.autor?.id
+                  "
+                  mat-menu-item
+                  (click)="onDeleteClick()">
+                  <mat-icon color="warn">delete_outline</mat-icon>
+                  <span>Obriši</span>
+                </button>
+                <button mat-menu-item (click)="onPrijaviClick()">
+                  <mat-icon color="accent" class="material-icons-outlined"
+                    >flag</mat-icon
+                  >
+                  <span>Prijavi</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </mat-card-title-group>
+
+      <div *ngIf="isEditing">
+        <diskusija-form
+          (onCancel)="onIzmeniClick()"
+          (onSubmit)="onIzmeniSubmit($event)"
+          [diskusija]="this.diskusija"
+          descLabel="Izmeni diskusiju"
+          [hasCancel]="true"
+          submitLabel="Sačuvaj izmene"></diskusija-form>
+      </div>
+      <div *ngIf="!isEditing">
+        <ngx-skeleton-loader
+          *ngIf="!diskusijaLoaded"
+          [theme]="{
+            width: '60%',
+            height: '1.8rem',
+            'margin-top': '1em'
+          }"></ngx-skeleton-loader>
+        <mat-card-title style="margin-top: 1em" *ngIf="diskusijaLoaded">{{
+          diskusija?.naslov
+        }}</mat-card-title>
+
+        <div *ngIf="diskusija?.tip == 'zadatak'">
+          <mat-divider inset></mat-divider>
+          <mat-card-content>
+            <zadatak
+              [zadatak]="diskusija?.zadatak!"
+              [hasPokreni]="false"></zadatak>
+          </mat-card-content>
+          <mat-divider inset></mat-divider>
+        </div>
+
+        <div fxLayout="row" *ngIf="!diskusijaLoaded">
+          <ngx-skeleton-loader
+            *ngFor="let i of [0, 1, 2]"
+            [theme]="{
+              width: '80px',
+              height: '30px',
+              'margin-right': '10px',
+              'border-radius': '20px',
+              display: 'inline-block'
+            }"></ngx-skeleton-loader>
+        </div>
+        <div class="oblasti-cont" *ngIf="diskusija?.tip == 'oblast'">
+          <mat-card-content>
+            <span
+              style="font-weight: bold"
+              *ngFor="let oblast of diskusija?.oblasti; let i = index">
+              {{ oblast.naziv
+              }}<span *ngIf="i !== (diskusija?.oblasti?.length || 0) - 1"
+                >,</span
+              >
+            </span>
+          </mat-card-content>
+        </div>
+
+        <mat-card-content>
+          <div *ngIf="!diskusijaLoaded">
+            <ngx-skeleton-loader
+              [theme]="{
+                width: '70%'
+              }"></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{
+                width: '60%',
+                'margin-top': '-10px'
+              }"></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{
+                width: '80%',
+                'margin-top': '-10px'
+              }"></ngx-skeleton-loader>
+          </div>
+          <quill-view-html
+            *ngIf="diskusijaLoaded"
+            [content]="diskusija?.sadrzaj || ''"></quill-view-html>
+        </mat-card-content>
+
+        <div>
+          <dodatak-pregled [dodaci]="diskusija?.dodaci"></dodatak-pregled>
+        </div>
+      </div>
+
+      <mat-card-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <button
+              matTooltip="Zahvalite se kolegi"
+              (click)="toggleZahvaljena()"
+              mat-button
+              class="margin-reduced"
+              [color]="diskusija?.zahvaljena ? 'accent' : ''">
+              <mat-icon
+                *ngIf="diskusija?.zahvaljena; else nezahvaljena"
+                color="accent"
+                class="like-icon">
+                lightbulb
+              </mat-icon>
+              <ng-template #nezahvaljena>
+                <mat-icon color="primary" class="like-icon hov"
+                  >lightbulb_outline</mat-icon
+                >
+              </ng-template>
+              <span style="margin-left: 0.5em">
+                {{ diskusija?.brZahvalnica }}</span
+              >
+            </button>
+
+            <button
+              color="primary"
+              mat-button
+              class="margin-reduced"
+              (click)="scrollToForm()"
+              [disabled]="this.diskusija?.arhivirana">
+              <span class="option-display">
+                <mat-icon class="material-icons-outlined">comment</mat-icon>
+                <span style="margin-left: 0.5em">{{
+                  diskusija?.brKomentara
+                }}</span>
+              </span>
+            </button>
+          </div>
+
+          <div>
+            <button
+              mat-button
+              [color]="diskusija?.pracena ? 'accent' : ''"
+              (click)="togglePracena()">
+              <mat-icon *ngIf="!diskusija?.pracena" class="margin-reduced"
+                >notifications_none</mat-icon
+              >
+              <mat-icon *ngIf="diskusija?.pracena" class="margin-reduced"
+                >notifications</mat-icon
+              >
+            </button>
+          </div>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+
+    <div *ngIf="!this.diskusija?.arhivirana; else cDisabled">
+      <mat-card-subtitle
+        style="margin-top: 1em"
+        *ngIf="!diskusija?.komentari?.length">
+        Budite prvi koji će odgovoriti kolegi...
+      </mat-card-subtitle>
+      <div #commentRef>
+        <comment-form
+          (onSubmit)="onRootCommentSubmit($event)"
+          [hasCancel]="false"
+          [hasPredlog]="true"
+          [validateOnSubmit]="true"
+          [disabled]="this.diskusija?.arhivirana || false">
+        </comment-form>
+      </div>
+    </div>
+    <ng-template #cDisabled>
+      <h2 style="margin-top: 1em; gap: 0.5em" class="flex-start">
+        <mat-icon class="material-icons-outlined">information</mat-icon>
+        Arhivirane diskusije ne prihvataju nove odgovore.
+      </h2>
+    </ng-template>
+
+    <mat-divider></mat-divider>
+
+    <div>
+      <comment
+        [disabled]="this.diskusija?.arhivirana || false"
+        (onDelete)="onChildDelete($event)"
+        [activeComment$]="this.activeComment$"
+        *ngFor="let comment of diskusija?.komentari"
+        [scroll]="this.scrollAnchor"
+        [diskusija]="this.diskusija"
+        [comment]="comment"></comment>
+    </div>
+  </div>
+  <!-- <spinner
+    [showSpinner]="!(diskusijaLoaded$ | async)"
+    *ngIf="!(diskusijaLoaded$ | async)"></spinner> -->
+</div>

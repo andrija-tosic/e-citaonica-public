@@ -1,0 +1,81 @@
+<div class="mat-elevation-z0 outline">
+  <h4>
+    <b>
+      <mat-chip-list>
+        <mat-chip *ngFor="let oblast of zadatak?.oblasti">
+          {{ oblast.naziv }}
+        </mat-chip></mat-chip-list
+      >
+      <!-- <ng-container *ngFor="let oblast of zadatak?.oblasti; let i = index">
+        {{ oblast.naziv }}
+        <span *ngIf="i !== zadatak.oblasti.length - 1">,</span>
+      </ng-container> -->
+    </b>
+  </h4>
+
+  <div class="paragraf">
+    <div>
+      <quill-view-html
+        [content]="
+          zadatak.tekst.length > this.sliceLength
+            ? zadatak.tekst.slice(0, this.sliceLength) + '...' || ''
+            : zadatak.tekst.trim() || ''
+        "></quill-view-html>
+      <!-- <p [innerHTML]="zadatak.tekst | sanitizeHtml"></p> -->
+    </div>
+    <span class="clear"></span>
+    <div
+      [class]="{
+        'action-buttons': true,
+        'buttons-mobile': (isHandset$ | async)
+      }"
+      *ngIf="hasPokreni">
+      <span
+        [matTooltip]="
+          !this.zadatak.imaDiskusije
+            ? 'Trenutno nema diskusija za ovaj zadatak'
+            : ''
+        ">
+        <button
+          [matTooltip]="
+            !this.zadatak.imaDiskusije
+              ? 'Trenutno nema diskusija za ovaj zadatak'
+              : ''
+          "
+          [disabled]="!this.zadatak.imaDiskusije"
+          mat-stroked-button
+          (click)="onVidiDiskusije()">
+          <mat-icon class="material-icons-outlined">comment</mat-icon>
+          Vidi diskusije
+        </button>
+      </span>
+
+      <span
+        [matTooltip]="
+          !this.zadatak.imaDiskusijeSaResenjima
+            ? 'Trenutno nema rešenja za ovaj zadatak'
+            : ''
+        ">
+        <button
+          [disabled]="!this.zadatak.imaDiskusijeSaResenjima"
+          mat-stroked-button
+          color="accent"
+          (click)="onVidiResenja()">
+          <mat-icon class="material-icons-outlined">lightbulb</mat-icon>
+          Vidi rešenja
+        </button>
+      </span>
+
+      <span *ngIf="!(isHandset$ | async)" class="spacer"></span>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        matTooltip="Pokrenite diskusiju za ovaj zadatak"
+        (click)="onPokreniDiskusiju()">
+        <mat-icon>input</mat-icon>
+        Postavi pitanje
+      </button>
+    </div>
+  </div>
+</div>

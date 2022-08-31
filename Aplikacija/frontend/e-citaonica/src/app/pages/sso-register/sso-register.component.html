@@ -1,0 +1,55 @@
+<div class="page-container">
+  <div class="form-container">
+    <mat-card class="mat-elevation-z8">
+      <div class="logo-container">
+        <img
+          src="../../../assets/e-citaonica-logo.svg"
+          class="e-citaonica-logo"
+          alt="Logo" />
+      </div>
+      <h1>e-Čitaonica</h1>
+      <h2>Dovršite registraciju</h2>
+
+      <form [formGroup]="form" (submit)="onSubmit()">
+        <mat-card-content>
+          <div class="form-fields-container">
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                formControlName="indeks"
+                min="1000"
+                type="number"
+                placeholder="Broj indeksa" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Modul</mat-label>
+              <mat-select formControlName="modul">
+                <mat-option
+                  *ngFor="let modul of moduli | async"
+                  value="{{ modul.id }}"
+                  >{{ modul.naziv }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Godina</mat-label>
+              <mat-select formControlName="godina">
+                <mat-option *ngIf="jeOpsti()" value="1">1</mat-option>
+                <mat-option *ngIf="!jeOpsti()" value="2">2</mat-option>
+                <mat-option *ngIf="!jeOpsti()" value="3">3</mat-option>
+                <mat-option *ngIf="!jeOpsti()" value="4">4</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </form>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+        class="login-button">
+        Završi registraciju
+      </button>
+    </mat-card>
+  </div>
+</div>

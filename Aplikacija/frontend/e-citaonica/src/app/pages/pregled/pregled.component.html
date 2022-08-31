@@ -1,0 +1,132 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <!-- ako je editing mode -->
+
+    <predmet-form
+      *ngIf="this.editing"
+      [hasCancel]="true"
+      buttonLabel="Sačuvaj izmene"
+      [predmet]="this.predmet$ | async"
+      (onCancel)="onCancelEditing()"
+      (onSubmit)="onSacuvajIzmene($event)"></predmet-form>
+
+    <!-- ako nije editing mode -->
+
+    <spinner [showSpinner]="!(this.predmet$ | async)"></spinner>
+    <mat-card
+      *ngIf="!this.editing && (this.predmet$ | async)"
+      class="outline-card-white">
+      <div class="space-between" style="align-items: flex-start">
+        <div>
+          <h2>Semestar</h2>
+          <mat-card-content *ngIf="!editing">
+            {{ (this.predmet$ | async)?.godina }}. godina,
+            {{ (this.predmet$ | async)?.semestar }}. semestar
+          </mat-card-content>
+        </div>
+
+        <div class="edit-action-buttons">
+          <button
+            *ngIf="
+              AUTORIZACIJA_DISABLED ||
+              this.profesorPredmeta() ||
+              this.user?.tip === 'administrator'
+            "
+            mat-stroked-button
+            (click)="onIzmeni()">
+            <mat-icon class="material-icons-outlined">edit</mat-icon>
+            Izmeni
+          </button>
+
+          <button
+            *ngIf="AUTORIZACIJA_DISABLED || this.user?.tip === 'administrator'"
+            color="warn"
+            mat-stroked-button
+            (click)="onDelete()">
+            <mat-icon class="material-icons-outlined">delete</mat-icon>
+            Obriši
+          </button>
+
+          <button
+            *ngIf="
+              (AUTORIZACIJA_DISABLED ||
+                !profesorPredmeta() ||
+                this.user?.tip === 'administrator') &&
+              !(isHandset$ | async)
+            "
+            mat-icon-button
+            matTooltip="Pratite ovaj predmet"
+            (click)="this.pratiIliOtprati()"
+            color="primary">
+            <mat-icon *ngIf="!(this.predmet$ | async)?.pracen"
+              >bookmark_border</mat-icon
+            >
+            <mat-icon *ngIf="(this.predmet$ | async)?.pracen"
+              >bookmark</mat-icon
+            >
+          </button>
+        </div>
+      </div>
+
+      <h2>Moduli</h2>
+      <spinner [showSpinner]="!(this.predmet$ | async)?.moduli"></spinner>
+
+      <mat-card-content *ngFor="let modul of (this.predmet$ | async)?.moduli">
+        {{ modul.naziv }}
+      </mat-card-content>
+
+      <h2>O predmetu</h2>
+      <mat-card-content>{{ (this.predmet$ | async)?.opis }}</mat-card-content>
+
+      <h2>Oblasti</h2>
+
+      <div *ngIf="!editing" class="example-list">
+        <spinner [showSpinner]="!(this.predmet$ | async)?.oblasti"></spinner>
+        <div
+          *ngFor="let oblast of (this.predmet$ | async)?.oblasti"
+          class="example-box">
+          {{ oblast.naziv }}
+        </div>
+      </div>
+
+      <div class="profesor-management">
+        <div class="profesor-headers">
+          <h2>Predmetni profesori</h2>
+        </div>
+        <div class="drop-divs">
+          <div class="predmetni-profesori">
+            <div
+              [class]="
+                this.editing
+                  ? 'profesori-column dashed-border'
+                  : 'profesori-grid'
+              ">
+              <user-card
+                *ngFor="let profesor of (this.predmet$ | async)?.profesori"
+                [class]="{ 'vertical-width': (isHandset$ | async) || editing }"
+                [user]="profesor"
+                [isVertical]="(isHandset$ | async)! || editing">
+              </user-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<button
+  class="mat-elevation-z3"
+  (click)="this.pratiIliOtprati()"
+  *ngIf="
+    (AUTORIZACIJA_DISABLED ||
+      !profesorPredmeta() ||
+      this.user?.tip === 'administrator') &&
+    (isHandset$ | async)
+  "
+  class="md-fab md-fab-bottom-right"
+  mat-fab
+  color="primary">
+  <mat-icon *ngIf="!(this.predmet$ | async)?.pracen">bookmark_border</mat-icon>
+  <mat-icon *ngIf="(this.predmet$ | async)?.pracen">bookmark</mat-icon>
+</button>

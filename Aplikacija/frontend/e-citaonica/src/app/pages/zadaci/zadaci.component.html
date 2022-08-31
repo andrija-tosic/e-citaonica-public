@@ -1,0 +1,30 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <oblast-filter [predmet]="this.predmet$"></oblast-filter>
+
+    <div class="flex-center">
+      <spinner [showSpinner]="!(this.predmet$ | async)?.zadaci"></spinner>
+
+      <h1
+        *ngIf="(this.predmet$ | async)?.zadaci?.length === 0"
+        style="margin-top: 1em; gap: 0.5em"
+        class="flex-start">
+        <mat-icon class="material-icons-outlined">information</mat-icon>
+
+        Trenutno nema dostupnih zadataka za ovaj predmet.
+      </h1>
+    </div>
+
+    <ng-container *ngFor="let zadatak of (this.predmet$ | async)?.zadaci">
+      <mat-card
+        class="zadatak-card outline-card-white"
+        *ngIf="checkFilter(zadatak)">
+        <h2>
+          {{ zadatak.tip === 'pitanje' ? 'Pitanje' : 'Zadatak' }}
+        </h2>
+        <zadatak [predmet]="(this.predmet$ | async)!" [zadatak]="zadatak">
+        </zadatak>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

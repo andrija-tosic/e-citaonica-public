@@ -1,0 +1,35 @@
+<div class="card-cont" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="1 0 1%">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px">
+      <mat-icon
+        color="primary"
+        *ngIf="student?.slikaURL === ''"
+        class="user-img"
+        >account_circle</mat-icon
+      >
+      <img
+        class="user-img"
+        *ngIf="student?.slikaURL !== ''"
+        [src]="student?.slikaURL" />
+      <span>
+        {{ student?.ime }}
+      </span>
+    </div>
+    <div class="info-container">
+      <span [style]="{ color: 'gray' }"
+        >Broj komentara na predmetu:
+        <span class="value">{{ student?.brKomentara }}</span>
+        sa ukupno <span class="value">{{ student?.brZahvalnica }}</span>
+        zahvalnica
+      </span>
+    </div>
+  </div>
+  <div>
+    <span *ngIf="!added" (click)="onAddClick()" class="toggle">
+      <mat-icon color="primary">add</mat-icon>
+    </span>
+    <span *ngIf="added" (click)="onRemoveClick()" class="toggle">
+      <mat-icon color="primary">remove</mat-icon>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+
+.rezultat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // justify-content: space-evenly;
+  margin: 1em;
+  // text-align: center;
+  cursor: pointer;
+  // gap: 1em;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.card-ikonica {
+  font-size: 5em;
+  height: 1em;
+  width: 1em;
+}
+
+.mobile-ikonica {
+  font-size: 3em;
+}
+
+.rezultat-card {
+  &:hover {
+    @include mat.elevation(12);
+  }
+}
+
+.regular-card {
+  width: 10em;
+  height: 11em;
+}
+
+.vertical-card {
+  height: fit-content;
+  margin: 0;
+  margin-bottom: 0.5em;
+  align-items: flex-start;
+}
+
+.vertical-container {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  overflow: hidden;
+}

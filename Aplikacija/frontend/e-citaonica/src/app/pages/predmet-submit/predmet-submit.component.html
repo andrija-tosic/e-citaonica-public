@@ -1,0 +1,12 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <h1>Dodavanje predmeta</h1>
+
+    <predmet-form
+      [hasCancel]="true"
+      buttonLabel="Sačuvaj izmene"
+      [predmet]="null"
+      (onCancel)="onCancelEditing()"
+      (onSubmit)="onSacuvajIzmene($event)"></predmet-form>
+  </div>
+</div>

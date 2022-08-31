@@ -1,0 +1,39 @@
+::ng-deep .mat-tab-header-pagination {
+  display: none !important;
+  z-index: 1000;
+}
+
+::ng-deep .mat-tab-header {
+  overflow-x: scroll !important;
+  z-index: 1000;
+}
+
+::ng-deep .mat-tab-link-container {
+  overflow: visible !important;
+  z-index: 1000;
+}
+
+.naziv-header {
+  padding-left: 0.5em;
+  word-wrap: break-word;
+}
+
+.sakrij-overflow {
+  overflow: hidden !important;
+}
+
+.mat-tab-link {
+  padding: 0.1em !important;
+}
+
+.nav-links {
+  z-index: 1;
+}
+
+.predmet-toolbar {
+  display: flex;
+  // flex-wrap: wrap;
+  // height: fit-content;
+  // padding-bottom: 0.5em;
+  justify-content: space-between;
+}

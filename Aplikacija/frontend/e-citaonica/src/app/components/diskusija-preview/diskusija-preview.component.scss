@@ -1,0 +1,102 @@
+.diskusija-card {
+  margin-top: 1em;
+}
+
+.profile-photo {
+  height: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.student-border {
+  border: 1px solid var(--primary);
+}
+
+.profesor-border {
+  border: 1px solid var(--accent);
+}
+
+.user-img-icon {
+  font-size: 45px;
+  height: 45px;
+  width: 45px;
+  margin-left: -5px;
+}
+
+.user-img {
+  object-fit: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 40px;
+}
+
+.prati-diskusiju {
+  border-radius: 50% !important;
+}
+
+button {
+  min-width: 10px;
+}
+
+.diskusija-link {
+  color: black;
+
+  &:hover {
+    // text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.height-limit {
+  max-height: 256px;
+  overflow: hidden;
+}
+
+.gradijent {
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 180px,
+    transparent 256px
+  );
+  mask-image: linear-gradient(to bottom, black 160px, white 250px);
+}
+
+.autor-username:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.diskusija-card.showPredmet {
+  margin-top: 0;
+  border-radius: 0 0 1em 1em !important;
+  margin-bottom: 1em;
+}
+
+.parent-cont {
+  border-radius: 1em 1em 0 0;
+  box-sizing: border-box;
+  padding: 8px 16px;
+  background-color: white;
+  //border: 2px solid var(--gray-light);
+  //border-bottom-color: transparent;
+}
+
+.parent-cont:hover {
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0px 0px 10px 6px rgb(0 0 0 / 8%) !important;
+  }
+}

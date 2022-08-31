@@ -1,0 +1,152 @@
+<form [formGroup]="form" (onSubmit)="onAddBlanket()">
+  <mat-card>
+    <mat-card-content class="osnovne-informacije-cont blanket">
+      <mat-form-field appearance="fill">
+        <mat-label>Ispitni rok</mat-label>
+        <mat-select formControlName="ispitniRokId">
+          <mat-option
+            *ngFor="let rok of ispitniRokovi$ | async"
+            [value]="rok.id">
+            {{ rok.naziv }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Tip blanketa</mat-label>
+        <mat-select
+          formControlName="tip"
+          (selectionChange)="onUpdateTip($event)">
+          <mat-option value="pismeni">Pismeni</mat-option>
+          <mat-option value="teorijski">Teorijski</mat-option>
+          <mat-option value="kombinovani">Kombinovani</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="datum" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <ng-container formArrayName="zadaci">
+    <ng-container *ngFor="let zadatakForm of zadaci.controls; let i = index">
+      <ng-container [formGroupName]="i">
+        <mat-card>
+          <h3>
+            <div class="space-between">
+              <span class="align-text">{{ i + 1 }}. zadatak</span>
+              <button
+                type="button"
+                mat-stroked-button
+                color="warn"
+                (click)="onDeleteZadatak(i)">
+                Obriši
+                <mat-icon class="material-icons-outlined">delete</mat-icon>
+              </button>
+            </div>
+          </h3>
+          <mat-card-content>
+            <div class="osnovne-informacije-cont">
+              <mat-form-field appearance="fill">
+                <mat-label>Broj poena</mat-label>
+                <input
+                  type="number"
+                  matInput
+                  formControlName="brPoena"
+                  placeholder="20"
+                  min="5" />
+                <mat-error>Broj poena je najmanje 5.</mat-error>
+              </mat-form-field>
+              <mat-radio-group formControlName="tip">
+                <mat-radio-button
+                  value="pitanje"
+                  color="primary"
+                  [disabled]="this.tip.value === 'pismeni'"
+                  >Pitanje</mat-radio-button
+                >
+                <mat-radio-button
+                  value="zadatak"
+                  color="primary"
+                  [disabled]="this.tip.value === 'teorijski'"
+                  >Zadatak</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+            <mat-select-trigger>
+              <mat-chip-list selectable multiple>
+                <mat-chip
+                  #chip="matChip"
+                  *ngFor="let oblast of (predmet$ | async)?.oblasti"
+                  class="chip"
+                  [selected]="
+                    $any(zadatakForm)
+                      .get('oblastiIds')
+                      .value?.includes(oblast.id)
+                  "
+                  [class.chip-error]="
+                    zadatakForm.get('oblastiIds')?.touched &&
+                    zadatakForm.get('oblastiIds')?.invalid
+                  "
+                  [value]="oblast.id"
+                  (click)="toggleSelection(i, chip)">
+                  <mat-icon class="selected-chip" *ngIf="chip.selected"
+                    >check</mat-icon
+                  >
+                  {{ oblast.naziv }}
+                </mat-chip>
+              </mat-chip-list>
+            </mat-select-trigger>
+          </mat-card-content>
+          <mat-card-content>
+            <quill-wrapper formControlName="tekst"></quill-wrapper>
+          </mat-card-content>
+          <!-- <mat-card-content>
+            <upload-dodatak formControlName="dodaci"></upload-dodatak>
+          </mat-card-content> -->
+        </mat-card>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <mat-card>
+    <div
+      fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center"
+      fxLayout="column"
+      fxLayoutGap="5px grid"
+      [class]="(isHandset$ | async) ? 'buttons-mobile' : ''">
+      <div>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="addZadatak()"
+          type="button">
+          <mat-icon>add</mat-icon>
+          Dodaj još jedan zadatak
+        </button>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutGap="10px"
+        fxLayoutAlign.gt-xs="flex-end center"
+        fxLayoutAlign="space-between center">
+        <button
+          mat-stroked-button
+          color="warn"
+          *ngIf="hasCancel"
+          type="button"
+          (click)="onCancel.emit()">
+          <mat-icon>cancel</mat-icon>
+          Poništi
+        </button>
+        <button mat-raised-button color="primary" (click)="onAddBlanket()">
+          <mat-icon>check</mat-icon>
+          {{ buttonLabel }}
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</form>
+
+<!-- {{ form.value | json }} -->

@@ -1,0 +1,17 @@
+.form-fields-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dugme {
+  padding: 0.5em;
+}
+
+.dugme button {
+  width: 10em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}

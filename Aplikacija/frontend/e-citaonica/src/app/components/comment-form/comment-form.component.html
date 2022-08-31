@@ -1,0 +1,61 @@
+<form [formGroup]="form" *ngIf="!disabled">
+  <quill-wrapper formControlName="sadrzaj"></quill-wrapper>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between start"
+    [style.margin]="'8px 0'"
+    [class]="(isHandset$ | async) ? 'buttons-mobile' : ''">
+    <upload-dodatak
+      style="width: 100%"
+      formControlName="dodaci"
+      fxFlex="1 0 1%"></upload-dodatak>
+    <div fxLayoutGap="5px">
+      <!-- <button
+        mat-raised-button
+        (click)="onPredlog()"
+        matTooltip="Predložite rešenje za ovaj problem"
+        *ngIf="hasPredlog"
+        type="button"
+        color="accent"> -->
+      <div class="flex-start" style="flex-wrap: wrap" style="gap: 1em">
+        <div *ngIf="hasPredlog" class="flex-center" style="gap: 1em">
+          <mat-icon
+            style="overflow: hidden"
+            color="accent"
+            [class]="
+              this.form.get('predlogResenja')?.value === true
+                ? ''
+                : 'material-icons-outlined'
+            ">
+            lightbulb
+          </mat-icon>
+          <mat-checkbox formControlName="predlogResenja" color="accent">
+            Predlažem rešenje
+          </mat-checkbox>
+        </div>
+        <!-- Predloži rešenje
+        </button> -->
+        <div class="flex-start" fxLayoutGap="1em">
+          <button
+            type="button"
+            *ngIf="hasCancel"
+            mat-stroked-button
+            (click)="onCancel.emit()">
+            <mat-icon class="material-icons-outlined">cancel</mat-icon>
+            Poništi
+          </button>
+          <button
+            [disabled]="disabled"
+            type="button"
+            (click)="onPostavi()"
+            mat-raised-button
+            color="primary">
+            <mat-icon>check</mat-icon>
+
+            {{ this.buttonLabel }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,47 @@
+.user-img {
+  object-fit: cover;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 40px;
+}
+
+mat-divider {
+  margin: 10px 0 !important;
+}
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  // text-decoration: underline;
+}
+
+.oblasti-cont {
+  margin: 10px 0px;
+}
+
+.option-display {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-display > mat-icon {
+  margin-top: 3px;
+}
+
+.option-display > span {
+  margin-right: 5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.full-width {
+  width: 100%;
+}

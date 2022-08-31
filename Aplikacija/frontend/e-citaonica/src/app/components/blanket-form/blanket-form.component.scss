@@ -1,0 +1,44 @@
+.form-control {
+  width: 100%;
+}
+
+form {
+  width: 100%;
+}
+
+.osnovne-informacije-cont {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.osnovne-informacije-cont.blanket {
+  justify-content: space-between;
+}
+
+.osnovne-informacije-cont.blanket mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+mat-card {
+  margin: 10px 0;
+}
+
+mat-radio-button {
+  margin: 0 10px;
+}
+
+span {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.quill-invalid {
+  border: 1px solid red;
+}
+
+.chip-error {
+  color: #f44336;
+}

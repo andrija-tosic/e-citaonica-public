@@ -1,0 +1,37 @@
+<div>
+  <h2 fxLayout="column" fxLayoutAlign="center center">
+    Navedite razlog prijave
+  </h2>
+</div>
+<form
+  [formGroup]="form"
+  style="width: 100%"
+  fxLayout="row"
+  fxLayoutAlign="center center">
+  <mat-form-field appearance="fill" [style]="{ width: '100%' }">
+    <mat-label>Razlog</mat-label>
+    <textarea
+      [style]="{ width: '100%' }"
+      formControlName="tekst"
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="8"
+      maxlength="256"
+      cdkAutosizeMaxRows="8"></textarea>
+    <mat-hint>{{ this.form.get('tekst')?.value.length }}/256</mat-hint>
+  </mat-form-field>
+</form>
+<div
+  mat-dialog-actions
+  class="buttons"
+  fxLayout="row"
+  fxLayoutAlign="space-between space-between">
+  <button mat-stroked-button color="accent" (click)="onConfirm()">
+    <mat-icon class="material-icons-outlined">flag</mat-icon>
+    Prijavi
+  </button>
+  <button mat-stroked-button (click)="onDismiss()">
+    <mat-icon class="material-icons-outlined">cancel</mat-icon>
+    Otkaži
+  </button>
+</div>

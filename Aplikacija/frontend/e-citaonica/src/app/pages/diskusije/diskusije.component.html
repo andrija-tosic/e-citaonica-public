@@ -1,0 +1,128 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <div
+      *ngIf="this.isHandset$ | async"
+      class="aktivnost-wrapper-handset outline-card brown-text">
+      <h2>Najaktivniji studenti</h2>
+
+      <div class="flex-start header">
+        <h3>Student</h3>
+
+        <h3>Broj objava</h3>
+      </div>
+
+      <ng-container *ngFor="let podatak of this.najaktivnijiStudenti">
+        <div class="row space-between">
+          <div class="flex-start" style="gap: 0.5em">
+            <img
+              *ngIf="podatak.student.slikaURL"
+              class="user-img"
+              [src]="podatak.student.slikaURL" />
+            <mat-icon
+              *ngIf="podatak.student.slikaURL === ''"
+              class="material-icons-outlined"
+              >school</mat-icon
+            >
+            <span>
+              {{ podatak.student.ime }}
+            </span>
+          </div>
+
+          <div class="br-objava-handset">
+            {{ podatak.brObjava }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <oblast-filter [predmet]="this.predmet$"></oblast-filter>
+
+    <div class="btns-container">
+      <a routerLink="./submit" *ngIf="!(isHandset$ | async)">
+        <button mat-raised-button color="primary">
+          <mat-icon>add</mat-icon>
+          Nova diskusija
+        </button>
+      </a>
+    </div>
+
+    <div class="flex-center">
+      <spinner [showSpinner]="!(this.predmet$ | async)?.diskusije"></spinner>
+
+      <h1
+        *ngIf="(this.predmet$ | async)?.diskusije?.length === 0"
+        style="margin-top: 1em; gap: 0.5em"
+        class="flex-start">
+        <mat-icon class="material-icons-outlined">information</mat-icon>
+
+        Trenutno nema dostupnih diskusija za ovaj predmet.
+      </h1>
+    </div>
+
+    <ng-container *ngFor="let diskusija of (this.predmet$ | async)?.diskusije">
+      <diskusija-preview
+        *ngIf="checkFilter(diskusija)"
+        [diskusija]="diskusija"></diskusija-preview>
+    </ng-container>
+  </div>
+
+  <div
+    *ngIf="!(this.isHandset$ | async)"
+    class="aktivnost-wrapper outline-card brown-text">
+    <h2 class="brown-text">Najaktivniji studenti</h2>
+
+    <div class="flex-start header">
+      <h3>Student</h3>
+
+      <h3>Broj objava</h3>
+    </div>
+
+    <spinner [showSpinner]="!this.najaktivnijiStudenti"></spinner>
+    <ng-container *ngFor="let podatak of this.najaktivnijiStudenti">
+      <div class="row space-between">
+        <div class="flex-start" style="gap: 0.5em">
+          <img
+            *ngIf="podatak.student.slikaURL"
+            class="user-img"
+            [src]="podatak.student.slikaURL" />
+          <mat-icon
+            *ngIf="podatak.student.slikaURL === ''"
+            class="material-icons-outlined"
+            >school</mat-icon
+          >
+          <span>
+            {{ podatak.student.ime }}
+          </span>
+        </div>
+
+        <div class="br-objava">
+          {{ podatak.brObjava }}
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- to do mozda -->
+    <!-- <mat-grid-list cols="2" rowHeight="2.5em">
+      <mat-grid-tile>Student</mat-grid-tile>
+      <mat-grid-tile>Broj objava</mat-grid-tile>
+      <ng-container *ngFor="let podatak of this.najaktivnijiStudenti">
+        <mat-grid-tile>
+          <img class="user-img" [src]="podatak.student.slikaURL" />
+          {{ podatak.student.ime }}
+        </mat-grid-tile>
+        <mat-grid-tile>{{ podatak.brObjava }}</mat-grid-tile>
+      </ng-container>
+    </mat-grid-list> -->
+  </div>
+
+  <button
+    class="mat-elevation-z3"
+    routerLink="./submit"
+    *ngIf="isHandset$ | async"
+    class="md-fab md-fab-bottom-right"
+    mat-fab
+    color="primary">
+    <mat-icon>add</mat-icon>
+    Započni novu diskusiju
+  </button>
+</div>

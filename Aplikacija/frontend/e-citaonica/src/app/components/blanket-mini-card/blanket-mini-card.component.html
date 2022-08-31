@@ -1,0 +1,65 @@
+<button
+  mat-button
+  [routerLink]="
+    this.showPredmet
+      ? ['/predmet/' + this.blanket!.predmet!.id + '/blanketi']
+      : []
+  "
+  [color]="
+    blanket!.id === (this.predmetService.izabraniBlanket$ | async)?.id
+      ? 'primary'
+      : ''
+  "
+  [class]="
+    blanket!.id === (this.predmetService.izabraniBlanket$ | async)?.id
+      ? 'mat-raised-button'
+      : 'mat-flat-button'
+  "
+  class="outline-card">
+  <div class="button-inner">
+    <mat-icon class="material-icons-outlined">description</mat-icon>
+    <!-- <div
+      style="
+        height: 12em;
+        width: 10em;
+        background: white;
+        font-size: 0.2em;
+        word-wrap: break-word;
+        white-space: pre-line;
+        line-height: 1;
+        padding: 1.5em;
+        text-align: justify;
+        color: black;
+      "
+      class="mat-elevation-z2">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+        dignissim, ante nec dignissim ultricies, metus purus commodo orci, ac
+        finibus tortor nibh ac orci. Cras faucibus rutrum turpis in egestas.
+      </p>
+    </div> -->
+
+    <div class="headers">
+      <div>
+        <h3
+          style="font-weight: bold"
+          *ngIf="this.showPredmet"
+          class="blanket-button-text">
+          {{ blanket?.predmet?.naziv }}
+        </h3>
+        <h3
+          [style]="
+            !this.showPredmet
+              ? 'font-weight: bold; text-align: left'
+              : 'text-align: left'
+          "
+          class="blanket-button-text">
+          {{ blanket?.ispitniRok?.naziv }}
+        </h3>
+      </div>
+      <div>
+        <h4 class="blanket-button-text">{{ blanket?.tip | titlecase }}</h4>
+      </div>
+    </div>
+  </div>
+</button>

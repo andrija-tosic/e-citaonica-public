@@ -1,0 +1,80 @@
+.preporuceni-blanketi {
+  display: flex;
+  gap: 1em;
+  max-width: 90vw; // TODO: bolji fix treba ovde
+  overflow: auto;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1em;
+
+  // &::-webkit-scrollbar {
+  //   // display: none; /* Safari and Chrome */
+  // }
+}
+
+.kartice {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  @media (min-width: 1300px) {
+    margin-right: 1em;
+    margin-left: 1em;
+  }
+  justify-content: space-evenly;
+}
+
+.preporuceno {
+  @media (max-width: 1300px) {
+    width: 95%;
+  }
+  @media (min-width: 1300px) {
+    width: 66%;
+  }
+}
+
+.preporuceni-blanketi-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1em;
+
+  blanket-mini-card {
+    width: 100%;
+
+    ::ng-deep button {
+      width: 100%;
+    }
+  }
+}
+
+.home {
+  display: flex;
+  flex-direction: row;
+}
+
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  // width: 90%;
+}
+
+.title-container {
+  margin-top: 2em;
+  height: fit-content;
+  width: 100%;
+
+  @media (min-width: 1000px) {
+    // margin-left: 6%;
+  }
+  @media (max-width: 1000px) {
+    margin-left: 0.5em;
+  }
+
+  // position: relative;
+  // bottom: 5em;
+}
+
+// .search-results {
+//   height: 200px !important;
+//   overflow: auto !important;
+// }

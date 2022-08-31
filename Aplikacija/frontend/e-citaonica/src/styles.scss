@@ -1,0 +1,443 @@
+/* You can add global styles to this file, and also import other style files */
+// @import '~@angular\material\prebuilt-themes\indigo-pink.css';
+
+@use '@angular/material' as mat;
+@import '~quill/dist/quill.snow.css';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import './e-citaonica-palete.scss';
+
+html,
+body {
+  height: 100%;
+}
+
+:root {
+  box-sizing: border-box;
+  --gray-shade: rgb(158, 158, 158);
+  --gray-light: rgb(224, 224, 224);
+  --primary: #102e4a;
+  --accent: #d66706;
+  --warn: red;
+  --body-background: white;
+  --card-background: #fff3e7;
+  --card-strong-background: #ffe0c4;
+}
+
+body {
+  margin: 0;
+}
+
+mat-card {
+  border-radius: 1em !important;
+}
+
+button {
+  border-radius: 0.5em !important;
+}
+
+a {
+  color: #0055a5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h1,
+h2,
+h3,
+h4,
+h5,
+mat-card-title,
+mat-card-subtitle {
+  font-family: Inter !important;
+}
+
+mat-card-subtitle {
+  font-size: 1.2em !important;
+}
+
+.naslov {
+  font-family: Inter !important;
+  font-size: large;
+}
+
+a {
+  text-decoration: none;
+}
+
+.following {
+  color: orange;
+}
+
+.not-following:hover {
+  color: mat-color(warn);
+}
+
+.outline-card {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.example-box.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-chip .cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+quill-editor {
+  display: block;
+}
+
+.ql-editor:focus {
+  box-shadow: 0 0 1px 1px #80bdff !important;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border: none;
+  // box-shadow: 0 0 0 0.01px var(--primary) !important;
+}
+
+.ql-editor {
+  min-height: 1px;
+  font-size: 1rem;
+  font-family: Inter !important;
+  padding: 0 !important;
+  margin: 0 0 12px !important;
+}
+
+quill-editor .ql-toolbar.ql-snow {
+  border: none;
+  box-shadow: 0px 0px 2px 0.5px #0000002e;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+
+quill-editor .ql-container.ql-snow {
+  border: none;
+  z-index: 2;
+  box-shadow: 0px 1px 2px 1px #0000002e;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+
+.page-container {
+  display: flex;
+  justify-content: center;
+}
+
+.inner-page-container {
+  @media (min-width: 1000px) {
+    width: max(85%, 900px);
+  }
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+  padding: 5px 10px;
+}
+
+.quill-errors .ql-editor.ql-blank::before {
+  color: red;
+}
+
+p {
+  word-break: break-word;
+  white-space: normal;
+}
+
+.quill-errors .ql-editor {
+  box-shadow: 0 2px 3px -2px var(--warn);
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+
+.md-fab-bottom-right {
+  position: fixed !important;
+  width: fit-content !important;
+  right: 30px;
+  bottom: 100px;
+  z-index: 2;
+  border-radius: 20em !important;
+  padding-left: 1em !important;
+  padding-right: 1em !important;
+}
+
+.flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.space-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.space-between {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mat-menu-panel {
+  border-radius: 2em !important;
+
+  @media (max-width: 1200px) {
+    margin-bottom: 10px;
+  }
+}
+
+.e-citaonica-logo {
+  // width: 40px;
+  height: 35px;
+}
+
+.logo-container {
+  // ovo na login, register, sso-register
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  // align-items: center;
+  gap: 0.5em;
+}
+
+.embedded-form-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding-top: 1.5em;
+}
+
+.student-inputi {
+  display: flex;
+  flex: 30%;
+  flex-grow: 1;
+}
+
+.autor-username {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  text-decoration: none;
+  font-size: 16px;
+  color: black;
+  &:hover {
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+}
+
+.ngx-bar {
+  z-index: 22;
+
+  // reseno u app.component.ts
+
+  // @media (max-width: 1000px) {
+  //   top: 56px !important;
+  // }
+  // @media (min-width: 1000px) {
+  //   top: 64px !important;
+  // }
+
+  box-shadow: 0px 5px 17px 0px var(--accent);
+}
+
+.mat-slider-thumb-label {
+  // transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vertical-width {
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .mat-snack-bar-container {
+    margin-bottom: 12em !important;
+  }
+}
+
+.predmet-card-content {
+  @media (min-width: 1000px) {
+    padding-top: 0.5em;
+  }
+  height: 100%;
+  display: flex !important;
+  align-items: center !important;
+
+  h3 {
+    font-size: 1.2em;
+  }
+}
+
+.content {
+  padding: 10px 30px;
+}
+
+::selection {
+  color: white;
+  background: var(--primary);
+}
+
+.potvrdjen,
+button.potvrdjen {
+  border: 2px solid var(--primary);
+}
+
+.like-icon.hov:hover {
+  color: var(--accent);
+}
+
+.hover-underline:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+
+.sidenav-header {
+  margin: 0 !important;
+  padding-bottom: 0.5em;
+}
+
+// ovde se namestaju boje pozadine i kartice
+.mat-expansion-panel-body,
+.mat-expansion-panel-header,
+body,
+.mat-drawer-inner-container {
+  background: var(--body-background);
+}
+
+.outline-card {
+  background: var(--card-background);
+}
+
+// .predmet-btn {
+//   background: var(--card-background);
+// }
+
+.outline-card {
+  border: none;
+  // @include mat.elevation(2);
+}
+
+.outline-card-white {
+  box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 8%) !important;
+}
+
+.mat-menu-panel {
+  max-height: 20em;
+  border-radius: 0.5em !important;
+  box-shadow: 0px 5px 15px 2px rgb(0 0 0 / 20%) !important;
+}
+
+.mat-chip.mat-standard-chip,
+blanket-mini-card .outline-card,
+.mat-raised-button {
+  background-color: var(--card-strong-background);
+  color: #5a2a00;
+}
+
+.brown-text {
+  color: #452000;
+}
+
+.mat-dialog-container {
+  border-radius: 1em !important;
+  background-color: var(--card-background);
+}
+
+.buttons-mobile {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+
+  .mat-tooltip-trigger,
+  button,
+  div,
+  div button {
+    width: 100% !important;
+  }
+}
+
+.example-list {
+  width: 100%;
+  border: solid 1px #ccc;
+  display: block;
+  border-radius: 1em;
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+
+.example-box {
+  padding-top: 1em;
+  padding-bottom: 1em;
+
+  height: fit-content;
+  padding-left: 1em;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 500;
+
+  .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
+
+  mat-error {
+    margin-top: 2em;
+  }
+}
+
+.user-icon {
+  height: 1em !important;
+  width: 1em !important;
+  font-size: 2em;
+}

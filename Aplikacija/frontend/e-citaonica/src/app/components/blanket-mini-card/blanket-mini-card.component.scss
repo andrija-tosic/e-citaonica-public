@@ -1,0 +1,38 @@
+button {
+  margin-top: 1em;
+  border-radius: 20em !important;
+  min-width: 15em;
+  width: fit-content;
+
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+}
+
+.button-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 1.5em;
+  transition: 0.2s;
+  padding: 0.1em;
+  padding-left: 0.5em;
+}
+
+button h2,
+button h3,
+button h4 {
+  margin: 0 !important;
+}
+
+.headers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 8px 0;
+}
+
+.blanket-button-text {
+  line-height: 120%;
+}

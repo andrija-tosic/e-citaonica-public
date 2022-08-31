@@ -1,0 +1,70 @@
+@use '@angular/material' as mat;
+.page-wrapper {
+  margin: 2em;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.predmet-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.rezultat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 10em;
+  margin: 1em;
+  margin-right: auto;
+  text-align: center;
+  cursor: pointer;
+  img {
+    object-fit: cover;
+  }
+}
+
+.card-ikonica {
+  font-size: 6em;
+  height: 1em;
+  width: 1em;
+}
+
+.rezultat-card {
+  &:hover {
+    @include mat.elevation(12);
+  }
+}
+
+.rezultat-card img {
+  border-radius: 50%;
+}
+
+.pretraga-form {
+  width: 100%;
+}
+
+::ng-deep .pretraga-form .mat-form-field-outline-start {
+  border-radius: 28px 0 0 28px !important;
+  min-width: 28px !important;
+}
+
+::ng-deep .pretraga-form .mat-form-field-outline-end {
+  border-radius: 0 28px 28px 0 !important;
+}
+
+::ng-deep .pretraga-form .mat-form-field-infix {
+  padding: 0 !important;
+  padding-left: 0.8em !important;
+  bottom: 0.15em !important;
+}
+
+.search-input {
+  padding: 2px 0;
+}

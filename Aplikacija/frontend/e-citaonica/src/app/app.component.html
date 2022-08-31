@@ -1,0 +1,13 @@
+<ngx-loading-bar
+  height="3px"
+  [fixed]="false"
+  [style]="
+    setLoadingBarTopMargin()
+      ? (isHandset$ | async)
+        ? 'top: 56px'
+        : 'top: 64px'
+      : ''
+  "
+  color="var(--accent)"
+  [includeSpinner]="false"></ngx-loading-bar>
+<router-outlet></router-outlet>

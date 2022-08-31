@@ -1,0 +1,57 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Promenite lozinku</h1>
+
+  <div class="wrapper">
+    <form [formGroup]="form" (submit)="onConfirm()" (keyup.enter)="onConfirm()">
+      <mat-card-content>
+        <div class="form-fields-container">
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              formControlName="oldPassword"
+              type="password"
+              placeholder="********" />
+            <mat-label>Trenutna lozinka</mat-label>
+            <mat-error></mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              formControlName="newPassword"
+              type="password"
+              placeholder="********" />
+            <mat-label>Nova lozinka</mat-label>
+            <mat-error></mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              formControlName="newPasswordAgain"
+              type="password"
+              placeholder="********" />
+            <mat-label>Ponovo unesite novu lozinku</mat-label>
+            <mat-error></mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </form>
+    <mat-error>{{ errorMessage }}</mat-error>
+
+    <div class="slika-actions">
+      <div class="dugme">
+        <div mat-dialog-actions class="buttons">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="onConfirm()">
+            Sačuvaj
+          </button>
+          <button mat-stroked-button (click)="onDismiss()">Zatvori</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

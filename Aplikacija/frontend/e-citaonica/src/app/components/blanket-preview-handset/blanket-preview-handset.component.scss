@@ -1,0 +1,9 @@
+.close-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-dialog-content {
+  max-height: 100% !important;
+  padding-bottom: 10em; // prostor za mat-fabs
+}

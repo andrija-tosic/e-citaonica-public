@@ -1,0 +1,41 @@
+<mat-toolbar color="primary" class="mat-elevation-z1" class="predmet-toolbar">
+  <h1 class="naziv-header" style="text-overflow: ellipsis; overflow: hidden">
+    {{ predmet?.naziv }}
+  </h1>
+  <!-- <span class="spacer"></span> -->
+  <a routerLink="./blanketi/vezbanje">
+    <button
+      matTooltip="Sastavi blanket za vežbu kao na realnom primeru"
+      style="border: 1px solid var(--accent)"
+      mat-raised-button
+      color="accent">
+      Vežbanje
+    </button>
+  </a>
+</mat-toolbar>
+<div [class]="(isHandset$ | async) ? 'content-handset' : 'content'">
+  <nav
+    mat-tab-nav-bar
+    animationDuration="0ms"
+    mat-align-tabs="center"
+    mat-stretch-tabs
+    [color]="'primary'"
+    [tabPanel]="tabPanel"
+    [class]="{ 'sakrij-overflow': !(isHandset$ | async), 'nav-links': true }"
+    style="margin-bottom: 0.5em">
+    <a
+      mat-tab-link
+      *ngFor="let link of navLink$ | async"
+      [routerLink]="link.link"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [active]="rla.isActive">
+      <span class="naslov">
+        {{ link.label }}
+      </span>
+    </a>
+  </nav>
+  <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+
+  <router-outlet></router-outlet>
+</div>

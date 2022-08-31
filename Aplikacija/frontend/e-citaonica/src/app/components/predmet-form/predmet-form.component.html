@@ -1,0 +1,185 @@
+<!-- {{ this.form.value | json }} -->
+<div class="page-container">
+  <div class="inner-page-container">
+    <mat-card class="outline-card-white">
+      <form [formGroup]="form" (onSubmit)="onAddPredmet()">
+        <div class="space-between" style="align-items: flex-start">
+          <div>
+            <h2>Moduli</h2>
+          </div>
+
+          <div class="edit-action-buttons">
+            <button mat-stroked-button color="warn" (click)="this.cancel()">
+              <mat-icon class="material-icons-outlined">cancel</mat-icon>
+              Poništi izmene
+            </button>
+
+            <button mat-raised-button color="primary" (click)="onAddPredmet()">
+              <mat-icon>done</mat-icon>
+              Sačuvaj
+            </button>
+          </div>
+        </div>
+
+        <mat-chip-list selectable multiple>
+          <mat-chip
+            #chip="matChip"
+            *ngFor="let modul of this.moduli$ | async"
+            (click)="selektujModul(chip, modul)"
+            [selected]="matChipSelected(modul)"
+            class="chip">
+            <mat-icon class="selected-chip" *ngIf="chip.selected"
+              >check</mat-icon
+            >
+            {{ modul.naziv }}
+          </mat-chip>
+        </mat-chip-list>
+
+        <div>
+          <h2>Semestar</h2>
+        </div>
+        <div>
+          {{ samoOpstiModulIzabran().min }}
+          <mat-slider
+            formControlName="semestar"
+            [min]="samoOpstiModulIzabran().min"
+            [max]="samoOpstiModulIzabran().max"
+            tickInterval="1"
+            thumbLabel="true">
+          </mat-slider>
+          {{ samoOpstiModulIzabran().max }}
+        </div>
+
+        <h2>O predmetu</h2>
+
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Naziv predmeta</mat-label>
+          <input matInput type="text" formControlName="naziv" />
+          <mat-error>Predmet mora da ima naziv.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field style="width: 100%" appearance="outline">
+          <mat-label>Opis predmeta</mat-label>
+          <textarea
+            style="height: 15em"
+            matInput
+            formControlName="opis"></textarea>
+          <mat-error>Predmet mora da ima opis.</mat-error>
+        </mat-form-field>
+
+        <h2>Oblasti</h2>
+
+        <div
+          cdkDropList
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <ng-container formArrayName="oblasti">
+            <div *ngFor="let oblast of oblasti.controls; let i = index">
+              <div class="example-box" cdkDrag>
+                <ng-container [formGroupName]="i">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <mat-label>Naziv oblasti</mat-label>
+                    <input
+                      id="oblast-input"
+                      matInput
+                      formControlName="naziv"
+                      type="text" />
+                    <mat-error>Oblast mora da ima naziv.</mat-error>
+                  </mat-form-field>
+
+                  <div class="edit-icons">
+                    <button
+                      mat-icon-button
+                      (click)="obrisiOblast(i)"
+                      color="warn">
+                      <mat-icon class="material-icons-outlined"
+                        >delete</mat-icon
+                      >
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+          <div class="flex-end">
+            <button
+              style="margin: 1em"
+              mat-stroked-button
+              (click)="dodajOblast()">
+              <mat-icon>add</mat-icon>
+              Dodaj novu oblast
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="profesor-management"
+          *ngIf="
+            AUTORIZACIJA_DISABLED ||
+            (this.user$ | async)?.tip === 'administrator'
+          ">
+          <div class="profesor-headers">
+            <h2>Predmetni profesori</h2>
+
+            <div>
+              <h2>Dodavanje profesora</h2>
+              <mat-form-field class="pretraga-form" appearance="outline">
+                <input
+                  matInput
+                  #input
+                  matInputAutofocus
+                  formControlName="query"
+                  placeholder="Ime ili email profesora"
+                  (keyup)="this.subject.next($any($event).target.value)"
+                  type="text" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="drop-divs">
+            <div class="predmetni-profesori">
+              <div
+                cdkDropList
+                id="pp"
+                #pp="cdkDropList"
+                [cdkDropListData]="this.predmetniProfesori"
+                [cdkDropListConnectedTo]="[op]"
+                (cdkDropListDropped)="dropProfesor($any($event))"
+                class="profesori-column dashed-border">
+                <user-card
+                  *ngFor="let profesor of this.predmetniProfesori"
+                  cdkDrag
+                  [user]="profesor"
+                  [isVertical]="true"
+                  class="vertical-width">
+                </user-card>
+              </div>
+            </div>
+
+            <div style.display="block" class="ostali-profesori">
+              <div
+                cdkDropList
+                id="op"
+                #op="cdkDropList"
+                [cdkDropListData]="this.displayedProfs"
+                [cdkDropListConnectedTo]="[pp]"
+                (cdkDropListDropped)="dropProfesor($any($event))"
+                class="profesori-column dashed-border">
+                <div
+                  cdkDrag
+                  *ngFor="let profesor of this.displayedProfs; let i = index"
+                  class="vertical-width">
+                  <user-card
+                    [user]="profesor"
+                    [isVertical]="true"
+                    class="vertical-width">
+                    >
+                  </user-card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<mat-dialog-content>
+  <div class="close-div">
+    <h2 *ngIf="isHandset$ | async">Pregled blanketa</h2>
+    <button mat-icon-button (click)="this.dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <blanket-preview [blanket]="this.blanket"></blanket-preview>
+</mat-dialog-content>

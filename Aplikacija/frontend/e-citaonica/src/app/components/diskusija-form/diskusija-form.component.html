@@ -1,0 +1,84 @@
+<form [formGroup]="form" (ngSubmit)="onSubmitForm()">
+  <mat-card class="outline-card-white">
+    <mat-card-title *ngIf="hasDescription">{{ descLabel }}</mat-card-title>
+    <mat-divider *ngIf="hasDescription"></mat-divider>
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Naslov</mat-label>
+        <input
+          formControlName="naslov"
+          matInput
+          #naslov
+          maxlength="256"
+          placeholder="Kratak opis vašeg problema..." />
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <div *ngIf="this.zadatak">
+    <mat-card>
+      <zadatak [zadatak]="this.zadatak" [hasPokreni]="false"></zadatak>
+    </mat-card>
+  </div>
+  <mat-card class="outline-card-white">
+    <div class="row">
+      <ng-container *ngIf="tip == 'oblast'">
+        <mat-hint
+          >Pomozite ostalima da pronađu Vašu diskusiju time što ćete odabrati
+          vezane oblasti</mat-hint
+        >
+        <mat-chip-list selectable multiple>
+          <mat-chip
+            #chip="matChip"
+            *ngFor="let oblast of (predmet$ | async)?.oblasti"
+            class="chip"
+            [value]="oblast.id"
+            [selected]="form.get('oblastiIds')?.value?.includes(oblast.id)"
+            [class.chip-error]="oblasti?.touched && oblasti?.invalid"
+            (click)="toggleSelection(chip)">
+            <mat-icon class="selected-chip" *ngIf="chip.selected"
+              >check</mat-icon
+            >
+            {{ oblast.naziv }}
+          </mat-chip>
+        </mat-chip-list>
+      </ng-container>
+
+      <quill-wrapper formControlName="sadrzaj"></quill-wrapper>
+      <div [style.margin]="'8px 0'">
+        <upload-dodatak
+          class="upload-dodatak"
+          formControlName="dodaci"></upload-dodatak>
+      </div>
+    </div>
+  </mat-card>
+</form>
+<div
+  fxLayoutAlign="space-between center"
+  fxLayout="row wrap"
+  [class]="(isHandset$ | async) ? 'buttons-mobile' : ''">
+  <div>
+    <button
+      color="primary"
+      mat-stroked-button
+      (click)="showDialog()"
+      *ngIf="hasOsobe">
+      <mat-icon class="material-icons-outlined">person_add</mat-icon>
+      Obavesti kolege
+    </button>
+  </div>
+  <div fxLayoutAlign="end" fxLayoutGap="5px">
+    <button
+      mat-stroked-button
+      color="warn"
+      type="button"
+      *ngIf="hasCancel"
+      (click)="onCancel.emit()">
+      <mat-icon>cancel</mat-icon>
+      Poništi
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmitForm()">
+      <mat-icon>check</mat-icon>
+      {{ submitLabel }}
+    </button>
+  </div>
+</div>

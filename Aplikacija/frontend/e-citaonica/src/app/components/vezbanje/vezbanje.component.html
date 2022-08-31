@@ -1,0 +1,23 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <h1>Generiši primer blanketa za vežbu</h1>
+    <oblast-filter [predmet]="this.predmet$"></oblast-filter>
+    <div style="margin-top: 1em" class="flex-end">
+      <button
+        matTooltip=""
+        (click)="generisi()"
+        mat-raised-button
+        color="accent">
+        <mat-icon class="material-icons-outlined">replay</mat-icon>
+        Sastavi blanket
+      </button>
+    </div>
+
+    <div class="flex-center">
+      <blanket-preview
+        *ngIf="this.blanket$.value"
+        [zaVezbu]="true"
+        [blanket]="this.blanket$"></blanket-preview>
+    </div>
+  </div>
+</div>

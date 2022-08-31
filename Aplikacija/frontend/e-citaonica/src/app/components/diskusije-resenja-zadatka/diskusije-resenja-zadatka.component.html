@@ -1,0 +1,20 @@
+<div class="page-container">
+  <div class="inner-page-container">
+    <h1>{{ this.headerText }}</h1>
+
+    <ng-container *ngFor="let diskusija of this.diskusije$ | async">
+      <diskusija-preview [diskusija]="diskusija"></diskusija-preview>
+    </ng-container>
+  </div>
+</div>
+
+<button
+  class="mat-elevation-z3"
+  routerLink="./submit"
+  *ngIf="isHandset$ | async"
+  class="md-fab md-fab-bottom-right"
+  mat-fab
+  color="primary">
+  <mat-icon>add</mat-icon>
+  Započni novu diskusiju
+</button>

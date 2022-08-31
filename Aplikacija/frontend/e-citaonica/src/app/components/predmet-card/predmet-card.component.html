@@ -1,0 +1,49 @@
+<mat-card
+  [class]="{
+    'rezultat-card': true,
+    'vertical-card': isVertical,
+    'regular-card': !isVertical
+  }">
+  <ng-container *ngIf="!isVertical">
+    <!-- <mat-icon mat-card-sm-image class="card-ikonica material-icons-outlined">
+      topic</mat-icon
+    > -->
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        min-width: 2.5em;
+        min-height: 2.5em;
+        font-size: 2em;
+        border-radius: 50%;
+        color: white;
+      "
+      [style.backgroundColor]="backgroundColorHash(predmet.naziv)"
+      [style.color]="textColorHash(predmet.naziv)">
+      {{ skraceniNazivPredmeta(predmet) }}
+    </div>
+
+    <mat-card-content class="predmet-card-content" style="text-align: center">
+      <h3>{{ predmet.naziv }}</h3>
+    </mat-card-content>
+  </ng-container>
+  <ng-container *ngIf="isVertical">
+    <div class="vertical-container">
+      <!-- <mat-icon
+        mat-card-sm-image
+        class="card-ikonica mobile-ikonica material-icons-outlined">
+        topic</mat-icon
+      > -->
+
+      <predmet-icon [predmet]="predmet"></predmet-icon>
+
+      <mat-card-content class="predmet-card-content" style="margin-bottom: 0">
+        <h3>{{ predmet.naziv }}</h3>
+      </mat-card-content>
+    </div>
+  </ng-container>
+</mat-card>

@@ -1,0 +1,100 @@
+<div class="invisible-input-cont">
+  <input #quillFile type="file" (change)="fileSelected($event)" />
+</div>
+<div [formGroup]="quillForm">
+  <quill-editor
+    formControlName="text"
+    #quillEditor
+    [modules]="modules"
+    (onEditorCreated)="getEditorInstance($event)"
+    (onContentChanged)="onQuillContentChanged($event)"
+    [ngClass]="{ 'quill-errors': showError }"
+    placeholder="Pišite ovde..."
+    (onBlur)="onQuillTouched()"
+    trackChanges="all">
+    <div quill-editor-toolbar>
+      <span class="ql-formats">
+        <button mat-flat-button type="button" class="ql-bold">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_bold</mat-icon
+          >
+        </button>
+        <button mat-flat-button type="button" class="ql-italic">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_italic</mat-icon
+          >
+        </button>
+      </span>
+      <span class="ql-formats">
+        <button mat-flat-button type="button" class="ql-blockquote">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_quote</mat-icon
+          >
+        </button>
+        <button mat-flat-button type="button" class="ql-code-block">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >code</mat-icon
+          >
+        </button>
+      </span>
+      <span class="ql-formats">
+        <button mat-flat-button type="button" value="ordered" class="ql-list">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_list_numbered</mat-icon
+          >
+        </button>
+        <button mat-flat-button type="button" value="bullet" class="ql-list">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_list_bulleted</mat-icon
+          >
+        </button>
+      </span>
+      <span class="ql-formats">
+        <button mat-flat-button type="button" class="ql-indent" value="-1">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_indent_decrease</mat-icon
+          >
+        </button>
+        <button mat-flat-button type="button" class="ql-indent" value="+1">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >format_indent_increase</mat-icon
+          >
+        </button>
+      </span>
+      <span class="ql-formats">
+        <button mat-flat-button type="button" class="ql-link">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >link</mat-icon
+          >
+        </button>
+        <button mat-flat-button type="button" class="ql-image">
+          <mat-icon
+            color="primary"
+            class="material-icons-outlined toolbar-ikonice"
+            >image</mat-icon
+          >
+        </button>
+      </span>
+    </div>
+
+    <span class="spacer"></span>
+  </quill-editor>
+</div>

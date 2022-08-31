@@ -1,0 +1,157 @@
+<button
+  class="mat-elevation-z3"
+  *ngIf="(isHandset$ | async) && !isEditing && !zaVezbu"
+  class="md-fab md-fab-bottom-right"
+  mat-fab
+  color=""
+  (click)="onIzmeni()">
+  <mat-icon class="material-icons-outlined">edit</mat-icon>
+</button>
+
+<button
+  class="mat-elevation-z3"
+  *ngIf="(isHandset$ | async) && !isEditing && !zaVezbu"
+  class="md-fab md-fab-bottom-right"
+  mat-fab
+  color=""
+  style="bottom: 2em"
+  (click)="onObrisi()">
+  <mat-icon color="warn" class="material-icons-outlined">delete</mat-icon>
+</button>
+
+<div class="papir outline-card-white">
+  <div
+    *ngIf="isEditing"
+    fxLayout="row"
+    fxLayoutGap="20px"
+    ngClass.gt-sm="margine">
+    <blanket-form
+      [style]="{ width: '100%' }"
+      [hasCancel]="true"
+      buttonLabel="Sačuvaj izmene"
+      [blanket]="this.blanket$ | async"
+      (onCancel)="onCancelEditing()"
+      (onSubmit)="onSacuvajIzmene($event)"
+      [ispitniRokovi$]="ispitniRokovi$"
+      [predmet$]="predmet$"></blanket-form>
+  </div>
+  <div ngClass.gt-xs="margine" [ngClass]="'margine-handset'" *ngIf="!isEditing">
+    <div
+      *ngIf="!(isHandset$ | async)"
+      fxLayout="row"
+      fxLayoutAlign="end"
+      style="margin: -2em 0 1.5em 0">
+      <button
+        *ngIf="!zaVezbu"
+        mat-stroked-button
+        color="primary"
+        style="margin-right: 0"
+        (click)="onExpandOrShrink()">
+        <ng-container *ngIf="isExpanded">
+          Skupi
+          <mat-icon>fullscreen_exit</mat-icon>
+        </ng-container>
+        <ng-container *ngIf="!isExpanded">
+          Proširi
+          <mat-icon>fullscreen</mat-icon>
+        </ng-container>
+      </button>
+    </div>
+
+    <div class="header">
+      <div class="ispitni-rok">
+        <h3>
+          {{ (this.blanket$ | async)?.ispitniRok?.naziv }}
+          <span
+            *ngIf="
+              (this.blanket$ | async)?.ispitniRok?.naziv !== 'Kolokvijum I' &&
+              (this.blanket$ | async)?.ispitniRok?.naziv !== 'Kolokvijum II'
+            ">
+            ispitni rok
+          </span>
+        </h3>
+      </div>
+
+      <div class="datum">
+        <h3>{{ (this.blanket$ | async)?.datum | date: 'longDate' }}</h3>
+      </div>
+    </div>
+    <div class="predmet">
+      <h1>
+        <b>{{ (this.predmet$ | async)?.naziv }}</b>
+      </h1>
+    </div>
+    <div
+      *ngFor="let zadatak of (this.blanket$ | async)?.zadaci"
+      style="margin-bottom: 2em">
+      <h3>
+        <b>{{ zadatak.redniBr }}. Zadatak ({{ zadatak.brPoena }} poena)</b>
+      </h3>
+      <zadatak
+        [predmet]="(this.blanket$ | async)?.predmet!"
+        [zadatak]="zadatak"></zadatak>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isEditing"
+    class="space-between"
+    style="padding: 1em; align-items: center">
+    <div class="flex-start">
+      <button
+        matTooltip="Vidite koliko vam je vremena potrebno da odradite simulaciju ispita"
+        *ngIf="!this.timerStarted"
+        mat-stroked-button
+        color="accent"
+        (click)="startTimer()">
+        <mat-icon class="material-icons-outlined">timer</mat-icon>
+        Započni tajmer
+      </button>
+
+      <button
+        *ngIf="this.timerStarted"
+        mat-stroked-button
+        color="primary"
+        (click)="togglePauseTimer()">
+        <mat-icon *ngIf="this.timerPaused" class="material-icons-outlined"
+          >play_circle</mat-icon
+        >
+        <mat-icon *ngIf="!this.timerPaused" class="material-icons-outlined"
+          >pause_circle</mat-icon
+        >
+      </button>
+
+      <button
+        *ngIf="this.timerStarted"
+        mat-stroked-button
+        color="accent"
+        (click)="stopTimer()">
+        <mat-icon class="material-icons-outlined">alarm_off</mat-icon>
+        Zaustavi tajmer
+      </button>
+    </div>
+    <h3 style="margin-bottom: 0 !important; margin-left: 1em; width: 100%">
+      <!-- <span *ngIf="this.timerStopped">Potrebno vreme:</span>
+      <span *ngIf="this.timerPaused">Pauza:</span> -->
+      {{ this.displayedTime }}
+    </h3>
+    <div
+      *ngIf="
+        !zaVezbu &&
+        !(isHandset$ | async) &&
+        (AUTORIZACIJA_DISABLED ||
+          profesorPredmeta() ||
+          (this.authService.getUserObserver() | async)?.tip === 'administrator')
+      "
+      class="flex-end">
+      <button mat-stroked-button (click)="onIzmeni()">
+        <mat-icon class="material-icons-outlined">edit</mat-icon>
+        Izmeni
+      </button>
+      <button mat-stroked-button color="warn" (click)="onObrisi()">
+        <mat-icon class="material-icons-outlined">delete</mat-icon>
+        Obriši
+      </button>
+    </div>
+  </div>
+</div>

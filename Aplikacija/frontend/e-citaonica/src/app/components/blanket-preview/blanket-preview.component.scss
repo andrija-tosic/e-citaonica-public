@@ -1,0 +1,38 @@
+.papir {
+  background-color: white;
+  height: fit-content;
+  border-radius: 0.1em;
+  margin-top: 1em;
+  // width: 100%;
+  min-width: 40em;
+  max-width: 60em;
+  // max-width: 100%;
+
+  @media (max-width: 1000px) {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
+
+.margine {
+  padding: 4em;
+}
+
+.margine-handset {
+  padding: 1em;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2em;
+}
+
+.predmet {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  margin: 0.2em;
+}

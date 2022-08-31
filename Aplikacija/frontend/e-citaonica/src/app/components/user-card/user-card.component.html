@@ -1,0 +1,87 @@
+<!-- <div> -->
+<mat-card
+  [class]="{
+    'rezultat-card': true,
+    'vertical-card': isVertical,
+    'regular-card': !isVertical
+  }"
+  routerLink="/korisnik/{{ user.id }}">
+  <ng-container *ngIf="!isVertical">
+    <img class="user-img" *ngIf="user.slikaURL !== ''" [src]="user.slikaURL" />
+
+    <mat-icon
+      class="card-ikonica material-icons-outlined"
+      *ngIf="
+        user.slikaURL === '' &&
+        (user.tip === 'profesor' || user.tip === 'administrator')
+      ">
+      account_circle
+    </mat-icon>
+
+    <mat-icon
+      class="card-ikonica material-icons-outlined"
+      *ngIf="user.slikaURL === '' && user.tip === 'student'">
+      school
+    </mat-icon>
+
+    <mat-card-header>
+      <mat-card-title class="card-text">{{ user.ime }}</mat-card-title>
+      <div class="header-bottom">
+        <mat-card-subtitle class="card-text">{{
+          user.tip | titlecase
+        }}</mat-card-subtitle>
+        <button
+          [style.visibility]="user.tip === 'profesor' ? 'visible' : 'hidden'"
+          mat-icon-button
+          (click)="collapse($event)">
+          <mat-icon *ngIf="collapsed">expand_more</mat-icon>
+          <mat-icon *ngIf="!collapsed">expand_less</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="!collapsed" class="email-btn-container">
+      <button mat-button (click)="mailTo($event)">
+        <div class="email-container">
+          <mat-icon material-icons-outlined mat-list-icon>email</mat-icon>
+          <span class="email">
+            {{ user.email }}
+          </span>
+        </div>
+      </button>
+    </mat-card-content>
+  </ng-container>
+
+  <!-- isHandset ili isEditing -->
+  <ng-container *ngIf="isVertical">
+    <div class="vertical-container">
+      <div class="img-container">
+        <img
+          *ngIf="user.slikaURL !== ''"
+          [src]="user.slikaURL"
+          class="user-img-mobile" />
+        <mat-icon
+          class="card-ikonica mobile-ikonica material-icons-outlined"
+          *ngIf="
+            user.slikaURL === '' &&
+            (user.tip === 'profesor' || user.tip === 'administrator')
+          ">
+          account_circle
+        </mat-icon>
+        <mat-icon
+          class="card-ikonica mobile-ikonica"
+          *ngIf="user.slikaURL === '' && user.tip === 'student'">
+          school
+        </mat-icon>
+      </div>
+      <div>
+        <mat-card-header>
+          <h3 class="card-text" style="margin-left: 16px">{{ user.ime }}</h3>
+          <div class="header-bottom">
+            <h4 class="card-text text-wrap">{{ user.tip | titlecase }}</h4>
+          </div>
+          <ng-container *ngIf="user.tip === 'profesor'"> </ng-container>
+        </mat-card-header>
+      </div>
+    </div>
+  </ng-container>
+</mat-card>

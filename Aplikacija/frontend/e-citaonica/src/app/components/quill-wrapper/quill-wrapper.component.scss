@@ -1,0 +1,29 @@
+.invisible-input-cont input {
+  width: 0px;
+  height: 0px;
+}
+
+.button-block {
+  display: block;
+}
+
+::ng-deep quill-editor .ql-editor {
+  font-size: 1rem;
+  min-height: 160px;
+  max-height: 400px;
+  font-family: Inter !important;
+  padding: 12px 15px !important;
+  margin: 0 !important;
+}
+
+.toolbar-ikonice {
+  font-weight: 100 !important;
+}
+
+::ng-deep .mat-flat-button .mat-button-wrapper > * {
+  vertical-align: baseline !important;
+}
+
+button {
+  min-width: 0px !important;
+}

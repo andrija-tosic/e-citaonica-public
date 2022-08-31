@@ -1,0 +1,20 @@
+@import '@angular/material/theming';
+@import './e-citaonica-palete.scss';
+@include mat-core();
+
+$e-citaonica-primary: mat-palette($md-primary);
+$e-citaonica-accent: mat-palette($md-accent);
+$e-citaonica-warn: mat-palette($mat-red);
+
+$e-citaonica-theme: mat-light-theme(
+  $e-citaonica-primary,
+  $e-citaonica-accent,
+  $e-citaonica-warn
+);
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Inter',
+);
+
+@include angular-material-theme($e-citaonica-theme);
+@include angular-material-typography($custom-typography);

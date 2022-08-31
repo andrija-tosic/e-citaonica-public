@@ -1,0 +1,120 @@
+<button
+  class="mat-elevation-z3"
+  routerLink="./submit"
+  *ngIf="
+    (isHandset$ | async) &&
+    (AUTORIZACIJA_DISABLED ||
+      profesorPredmeta() ||
+      this.user?.tip === 'administrator')
+  "
+  class="md-fab md-fab-bottom-right"
+  mat-fab
+  color="primary">
+  <mat-icon>add</mat-icon>
+  Dodaj blanket
+</button>
+
+<div class="page-container">
+  <div class="inner-page-container">
+    <div *ngIf="!isExpanded">
+      <mat-card class="mat-elevation-z0 outline-card">
+        <mat-form-field class="chips-form">
+          <div class="chips-container">
+            <h2 class="brown-text">Tip blanketa</h2>
+            <mat-chip-list multiple selectable>
+              <mat-chip
+                #chip="matChip"
+                *ngFor="let tip of tipovi"
+                (click)="selektujTip(chip)"
+                class="chip"
+                [value]="tip">
+                <mat-icon class="selected-chip" *ngIf="chip.selected"
+                  >check</mat-icon
+                >
+                {{ tip | titlecase }}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </mat-form-field>
+        <mat-form-field class="chips-form">
+          <div class="chips-container">
+            <h2 class="brown-text">Ispitni rok</h2>
+            <mat-chip-list multiple selectable>
+              <mat-chip
+                #chip="matChip"
+                *ngFor="let rok of rokovi"
+                (click)="selektujRok(chip, rok.id)"
+                class="chip"
+                [value]="rok.id">
+                <mat-icon class="selected-chip" *ngIf="chip.selected"
+                  >check</mat-icon
+                >
+                {{ rok.naziv }}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </mat-form-field>
+        <div
+          *ngIf="!(isHandset$ | async)"
+          fxLayoutAlign="end"
+          class="options-container">
+          <button
+            *ngIf="
+              AUTORIZACIJA_DISABLED ||
+              profesorPredmeta() ||
+              this.user?.tip === 'administrator'
+            "
+            mat-raised-button
+            color="primary"
+            routerLink="./submit">
+            <mat-icon>add</mat-icon>
+            Dodaj blanket
+          </button>
+        </div>
+      </mat-card>
+    </div>
+    <div class="blanketi">
+      <ng-container *ngIf="this.predmetService.izabraniBlanket$ | async">
+        <div class="godine" *ngIf="!isExpanded">
+          <div *ngFor="let godina of this.getGodine()">
+            <h2>{{ godina }}</h2>
+            <div *ngFor="let blanket of (predmet$ | async)?.blanketi">
+              <div
+                *ngIf="
+                  checkFilter(blanket) == true &&
+                  this.parseGodina(blanket) === godina
+                ">
+                <blanket-mini-card
+                  (click)="this.blanketOnClick(blanket)"
+                  [blanket]="blanket"></blanket-mini-card>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!(this.isHandset$ | async)" class="blanket-container">
+          <div>
+            <blanket-preview
+              *ngIf="
+                checkFilter((this.predmetService.izabraniBlanket$ | async)!)
+              "
+              [blanket]="this.predmetService.izabraniBlanket$"
+              (expandOrShrink)="isExpanded = !isExpanded">
+            </blanket-preview>
+          </div>
+        </div>
+      </ng-container>
+      <div>
+        <spinner [showSpinner]="!(this.predmet$ | async)?.blanketi"></spinner>
+        <h1
+          *ngIf="(this.predmet$ | async)?.blanketi?.length === 0"
+          style="margin-top: 1em; gap: 0.5em"
+          class="flex-start">
+          <mat-icon class="material-icons-outlined">information</mat-icon>
+
+          Trenutno nema dostupnih blanketa za ovaj predmet.
+        </h1>
+      </div>
+    </div>
+    <!-- </mat-card> -->
+  </div>
+</div>

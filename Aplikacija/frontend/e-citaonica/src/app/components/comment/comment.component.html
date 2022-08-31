@@ -1,0 +1,318 @@
+<button
+  [class.potvrdjen]="this.comment?.potvrdilacResenja"
+  *ngIf="subtreeCollapsed && comment?.komentari?.length"
+  class="expand-button"
+  (click)="collapse()">
+  <div>
+    <mat-icon
+      *ngIf="comment?.autor?.slikaURL === ''"
+      class="user-icon material-icons-outlined">
+      {{
+        comment?.autor?.tip === 'profesor' ||
+        comment?.autor?.tip === 'administrator'
+          ? 'account_circle'
+          : 'school'
+      }}
+    </mat-icon>
+    <img
+      class="user-img"
+      *ngIf="comment?.autor?.slikaURL !== ''"
+      [src]="comment?.autor?.slikaURL" />
+  </div>
+  <div fxLayoutGap="10px">
+    <span>
+      {{ comment?.autor?.ime }}
+    </span>
+    <span
+      [style]="{ color: 'gray' }"
+      [matTooltip]="(comment?.datumKreiranja | date)!">
+      {{ comment?.datumKreiranja | prettyDate }}
+    </span>
+  </div>
+  <mat-icon>expand_more</mat-icon>
+</button>
+<div
+  class="comment"
+  [ngClass]="{
+    'outline-card-white': showDiskusija,
+    'comment-sd': showDiskusija
+  }">
+  <div
+    *ngIf="showDiskusija"
+    class="parent-cont"
+    (click)="onDiskusijaClick()"
+    [ngClass]="{ 'parent-potvrdjen': comment?.potvrdilacResenja }">
+    <div fxLayoutAlign="start center" style="gap: 0.33em">
+      <predmet-icon
+        diameter="2em"
+        [predmet]="$any(comment?.diskusija?.predmet)"
+        fontSize="11px"></predmet-icon>
+      <div>
+        <span
+          routerLink="/predmet/{{ comment?.diskusija?.predmet?.id }}"
+          [style]="{
+            'white-space': 'nowrap'
+          }"
+          class="hover-underline"
+          >{{ comment?.diskusija?.predmet?.naziv }}</span
+        >
+        /
+        <span [style]="{ color: 'gray' }" class="hover-underline">
+          {{
+            comment?.diskusija?.naslov?.length! > 50
+              ? (comment?.diskusija?.naslov | slice: 0:50) + '...'
+              : comment?.diskusija?.naslov
+          }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div [hidden]="subtreeCollapsed">
+    <div
+      #commentRef
+      class="comment-container outline-card-white"
+      [ngClass]="{
+        potvrdjen: this.comment?.potvrdilacResenja,
+        showDiskusija: showDiskusija == true
+      }">
+      <div>
+        <div
+          fxLayout
+          fxLayoutAlign="space-between center"
+          class="full-width header-options">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            fxLayoutGap="7px"
+            class="user-info-container">
+            <div
+              class="autor-username"
+              style="margin-top: 0.5em; margin-left: 0.75em">
+              <mat-icon
+                *ngIf="comment?.autor?.slikaURL === ''"
+                class="user-icon material-icons-outlined">
+                {{
+                  comment?.autor?.tip === 'profesor' ||
+                  comment?.autor?.tip === 'administrator'
+                    ? 'account_circle'
+                    : 'school'
+                }}
+              </mat-icon>
+              <img
+                class="user-img"
+                *ngIf="comment?.autor?.slikaURL !== ''"
+                [src]="comment?.autor?.slikaURL" />
+              <span routerLink="/korisnik/{{ comment?.autor?.id }}">
+                {{ comment?.autor?.ime }}
+              </span>
+              <span
+                class="date"
+                [matTooltip]="(comment?.datumKreiranja | date)!">
+                {{ comment?.datumKreiranja | prettyDate }}
+              </span>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <!-- <span style="margin-left: 1em; color: 'gray'">
+            {{ comment?.datumKreiranja | prettyDate }}
+          </span> -->
+
+            <div
+              fxLayout="row"
+              fxLayoutGap="10px"
+              fxLayoutAlign="center center">
+              <div>
+                <mat-icon
+                  *ngIf="comment?.prihvacen"
+                  color="accent"
+                  matTooltip="Autor diskusije je prihvatio predloženo rešenje">
+                  done
+                </mat-icon>
+                <mat-icon
+                  *ngIf="comment?.potvrdilacResenja"
+                  color="primary"
+                  matTooltip="{{
+                    'Rešenje potvrdio ' + comment?.potvrdilacResenja?.ime
+                  }}">
+                  done_all
+                </mat-icon>
+              </div>
+              <div
+                *ngIf="comment?.predlogResenja"
+                class="predlog-cont"
+                matTooltip="Autor je ovaj komentar označio kao predlog rešenja diskusiji">
+                <div class="flex-start">
+                  <mat-icon class="material-icons-outlined" color="accent"
+                    >lightbulb</mat-icon
+                  >
+                  <span fxShow.gt-sm> Predlog rešenja</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button
+                *ngIf="!hideOptions"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button
+                  *ngIf="
+                    (AUTORIZACIJA_DISABLED || profesorPredmeta()) &&
+                    comment?.predlogResenja === true
+                  "
+                  mat-menu-item
+                  (click)="onTacnostToggle()">
+                  <div *ngIf="!this.comment?.potvrdilacResenja; else nemaP">
+                    <mat-icon color="primary">check</mat-icon>
+                    <span>Potvrdi tačnost</span>
+                  </div>
+                  <ng-template #nemaP>
+                    <mat-icon color="primary">remove</mat-icon>
+                    <span>Opozovi tačnost</span>
+                  </ng-template>
+                </button>
+                <button
+                  *ngIf="
+                    AUTORIZACIJA_DISABLED ||
+                    (this.user$ | async)?.tip === 'administrator' ||
+                    (this.user$ | async)?.id === comment?.autor?.id
+                  "
+                  mat-menu-item
+                  (click)="onEditClick()"
+                  [disabled]="disabled">
+                  <mat-icon class="material-icons-outlined">edit</mat-icon>
+                  <span>Izmeni</span>
+                </button>
+                <button
+                  *ngIf="
+                    AUTORIZACIJA_DISABLED ||
+                    (this.user$ | async)?.tip === 'administrator' ||
+                    profesorPredmeta() ||
+                    (this.user$ | async)?.id === comment?.autor?.id
+                  "
+                  mat-menu-item
+                  (click)="onDeleteClick()"
+                  [disabled]="disabled">
+                  <mat-icon color="warn">delete_outline</mat-icon>
+                  <span>Obriši</span>
+                </button>
+                <button mat-menu-item (click)="onPrijaviClick()">
+                  <mat-icon color="accent" class="material-icons-outlined"
+                    >flag</mat-icon
+                  >
+                  <span>Prijavi</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-main-container">
+        <div *ngIf="!isEditing()" class="comment-sadrzaj">
+          <div>
+            <quill-view-html
+              [content]="comment?.sadrzaj || ''"></quill-view-html>
+          </div>
+          <div *ngIf="comment?.dodaci">
+            <dodatak-pregled [dodaci]="comment?.dodaci"></dodatak-pregled>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <comment-form
+          *ngIf="isEditing()"
+          [komentar]="this.comment"
+          buttonLabel="Sačuvaj"
+          [clearOnSubmit]="false"
+          (onSubmit)="onEditSubmit($event)"
+          (onCancel)="this.activeComment$.next(null)"></comment-form>
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <button
+              mat-button
+              (click)="toggleZahvaljena()"
+              class="margin-reduced">
+              <mat-icon
+                *ngIf="comment?.zahvaljena; else nezahvaljena"
+                color="accent"
+                class="like-icon">
+                lightbulb
+              </mat-icon>
+              <ng-template #nezahvaljena>
+                <mat-icon color="primary" class="like-icon hov"
+                  >lightbulb_outline</mat-icon
+                >
+              </ng-template>
+              <span style="padding-left: 0.5em">
+                {{ comment?.brZahvalnica }}</span
+              >
+            </button>
+          </div>
+          <button
+            *ngIf="!hideOptions"
+            mat-button
+            color="primary"
+            (click)="onOdgovoriClick()"
+            [disabled]="disabled">
+            <mat-icon class="material-icons-outlined">reply</mat-icon>
+            Odgovori
+          </button>
+
+          <!-- treba  *ngIf="(comment?.autor)?.diskusija.id === this.authService.user.id" -->
+          <button
+            *ngIf="
+              !hideOptions &&
+              this.comment?.predlogResenja &&
+              (AUTORIZACIJA_DISABLED ||
+                this.diskusija?.autor?.id === (this.user$ | async)?.id)
+            "
+            mat-button
+            color="accent"
+            (click)="onPrihvatiOdgovor()">
+            <mat-icon
+              [class]="
+                this.comment?.prihvacen ? '' : 'material-icons-outlined'
+              ">
+              handshake
+            </mat-icon>
+            {{
+              this.comment?.prihvacen
+                ? 'Prihvaćeno rešenje'
+                : 'Prihvati rešenje'
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="children-container full-width" fxLayout="row" fxLayoutGap="2%">
+      <div
+        class="collapse-bar-wrapper"
+        [ngClass]="{ 'no-comments': !this.comment?.komentari?.length }"
+        (click)="collapse()">
+        <div class="collapse-bar"></div>
+      </div>
+      <div class="full-width">
+        <comment-form
+          *ngIf="isReplying()"
+          [buttonLabel]="'Odgovori'"
+          (onSubmit)="onChildSubmit($event)"
+          [clearOnSubmit]="false"
+          (onCancel)="this.activeComment$.next(null)"></comment-form>
+        <div>
+          <comment
+            *ngFor="let child of comment?.komentari"
+            [scroll]="this.scroll"
+            [comment]="child"
+            [disabled]="disabled"
+            (onDelete)="onChildDelete($event)"
+            [activeComment$]="this.activeComment$"></comment>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

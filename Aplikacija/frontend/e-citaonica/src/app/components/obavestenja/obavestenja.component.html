@@ -1,0 +1,61 @@
+<div class="page-container">
+  <mat-card style="width: 90%">
+    <mat-card-title style="margin-top: 20px">Obaveštenja</mat-card-title>
+
+    <div
+      *ngIf="
+        (this.authService.getUserObserver() | async)?.obavestenja?.length === 0
+      "
+      style="display: flex; margin-top: 3em; gap: 0.5em">
+      <mat-icon class="material-icons-outlined">information</mat-icon>
+      <h4>Trenutno nema obaveštenja.</h4>
+    </div>
+
+    <div *ngFor="let h of periodi; let i = index">
+      <h3 style="font-weight: bold; margin-top: 1em">
+        {{
+          h === 24 && imaObavestenjaZaPeriod(0, 24)
+            ? 'Danas'
+            : h === 168 && imaObavestenjaZaPeriod(24, 168)
+            ? 'Poslednje nedelje'
+            : h === 169 && imaObavestenjaZaPeriod(169)
+            ? 'Poslednjeg meseca'
+            : ''
+        }}
+      </h3>
+
+      <div
+        *ngFor="
+          let obavestenje of (this.authService.getUserObserver() | async)
+            ?.obavestenja
+        "
+        class="space-between">
+        <ng-container
+          *ngIf="
+            i > 0
+              ? prosloSati(obavestenje.datumIVreme) > periodi[i - 1] &&
+                prosloSati(obavestenje.datumIVreme) <= h
+              : prosloSati(obavestenje.datumIVreme) <= h
+          ">
+          <mat-icon color="primary">notifications</mat-icon>
+          <button
+            mat-button
+            class="space-between"
+            style="gap: 0.5em; overflow: hidden"
+            (click)="pregledObavestenja(obavestenje)">
+            <span [innerHtml]="obavestenje.sadrzaj | sanitizeHtml"></span>
+            <span>
+              {{ obavestenje.datumIVreme | date: 'MMM d, y, HH:mm' }}
+            </span>
+          </button>
+
+          <button
+            (click)="$event.stopPropagation(); obrisiObavestenje(obavestenje)"
+            mat-icon-button>
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </mat-card>
+</div>

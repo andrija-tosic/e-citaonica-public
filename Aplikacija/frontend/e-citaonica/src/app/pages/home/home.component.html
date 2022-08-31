@@ -1,0 +1,71 @@
+<div class="home-layout">
+  <div class="kartice">
+    <div style="display: flex; flex-direction: column" class="preporuceno">
+      <div class="title-container">
+        <h1 style="font-weight: bold">Dobrodošli u e-Čitaonicu!</h1>
+      </div>
+      <mat-card class="mat-elevation-z0 outline-card" style="margin-top: 1em">
+        <ng-container *ngIf="isHandset$ | async">
+          <h1 class="brown-text">Preporučeni blanketi</h1>
+          <div class="preporuceni-blanketi">
+            <!-- <mat-icon (click)="scrollLeft()">arrow_back</mat-icon> -->
+            <blanket-mini-card
+              [showPredmet]="true"
+              *ngFor="let blanket of this.blanketi$ | async"
+              [blanket]="blanket"></blanket-mini-card>
+            <!-- <mat-icon (click)="scrollRight()">arrow_forward</mat-icon> -->
+          </div>
+        </ng-container>
+
+        <div>
+          <h1 class="brown-text">Preporučene diskusije</h1>
+          <div *ngIf="(this.diskusije$ | async)?.length === 0">
+            <div fxLayoutAlign="start center" fxLayout="row">
+              <mat-icon>info</mat-icon>
+              <h3 [style]="{ margin: 0 }">
+                Trenutno nema preporučenih diskusija
+              </h3>
+            </div>
+          </div>
+
+          <div
+            class="container"
+            infiniteScroll
+            [infiniteScrollDistance]="1"
+            [infiniteScrollThrottle]="5"
+            [infiniteScrollContainer]="'.mat-sidenav-content'"
+            [fromRoot]="true"
+            (scrolled)="onScrollDown()">
+            <diskusija-preview
+              *ngFor="let diskusija of this.diskusije$ | async"
+              [diskusija]="diskusija"
+              [showPredmet]="true">
+            </diskusija-preview>
+          </div>
+          <spinner [showSpinner]="this.loading > 0"></spinner>
+          <div
+            *ngIf="caughtUp"
+            [style]="{ color: 'gray' }"
+            fxLayoutAlign="end center"
+            fxLayout="row">
+            <mat-icon>info</mat-icon>Zapratite predmete za još preporuka
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <mat-card
+      class="mat-elevation-z0 outline-card"
+      *ngIf="!(isHandset$ | async)"
+      style="margin-top: 6em; height: fit-content">
+      <h1 class="brown-text" style="margin-bottom: 0">Preporučeni blanketi</h1>
+      <div class="preporuceni-blanketi-column">
+        <spinner [showSpinner]="!(this.blanketi$ | async)"></spinner>
+        <blanket-mini-card
+          [showPredmet]="true"
+          *ngFor="let blanket of this.blanketi$ | async"
+          [blanket]="blanket"></blanket-mini-card>
+      </div>
+    </mat-card>
+  </div>
+</div>

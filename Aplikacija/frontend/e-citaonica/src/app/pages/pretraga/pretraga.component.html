@@ -1,0 +1,92 @@
+<div [class]="{ content: !(isHandset$ | async), 'page-container': true }">
+  <div class="inner-page-container">
+    <mat-card class="outline-card-white">
+      <h1>Pretraga korisnika i predmeta</h1>
+
+      <form
+        [formGroup]="form"
+        #formDirective="ngForm"
+        (keydown.enter)="$event.preventDefault()">
+        <mat-form-field class="pretraga-form" appearance="outline">
+          <div class="space-between">
+            <input
+              matInput
+              #input
+              class="search-input"
+              matInputAutofocus
+              formControlName="query"
+              placeholder="Pretraga"
+              type="text"
+              (keyup)="this.subject.next($any($event).target.value)" />
+            <button
+              mat-icon-button
+              (click)="this.subject.next(''); this.input.value = ''"
+              style="margin-right: 1em"
+              matSuffix
+              *ngIf="this.input.value != ''">
+              <mat-icon> close</mat-icon>
+            </button>
+
+            <button mat-icon-button matSuffix>
+              <mat-icon> search</mat-icon>
+            </button>
+          </div>
+        </mat-form-field>
+      </form>
+
+      <div
+        *ngIf="
+          this.user?.praceniPredmeti?.length !== 0 &&
+          (this.rezultati$ | async) === null
+        ">
+        <h1>Praćeni predmeti</h1>
+
+        <div [class]="(isHandset$ | async)! ? 'predmet-mobile' : 'flex'">
+          <a
+            *ngFor="let predmet of this.user?.praceniPredmeti"
+            routerLink="/predmet/{{ predmet.id }}">
+            <predmet-card
+              [predmet]="predmet"
+              [isVertical]="(isHandset$ | async)!"></predmet-card>
+          </a>
+        </div>
+      </div>
+
+      <h1
+        *ngIf="
+          (this.rezultati$ | async) &&
+          (this.rezultati$ | async)?.predmeti?.length !== 0
+        ">
+        Predmeti
+      </h1>
+
+      <div [class]="(isHandset$ | async)! ? 'predmet-mobile' : 'flex'">
+        <a
+          *ngFor="let predmet of (this.rezultati$ | async)?.predmeti"
+          routerLink="/predmet/{{ predmet.id }}">
+          <predmet-card
+            [predmet]="predmet"
+            [isVertical]="(isHandset$ | async)!"></predmet-card>
+        </a>
+      </div>
+
+      <h1
+        *ngIf="
+          (this.rezultati$ | async) &&
+          (this.rezultati$ | async)?.korisnici?.length !== 0
+        ">
+        Korisnici
+      </h1>
+
+      <div class="flex">
+        <ng-container
+          *ngFor="let korisnik of (this.rezultati$ | async)?.korisnici">
+          <user-card
+            [user]="korisnik"
+            [isVertical]="(isHandset$ | async)!"
+            [class]="{ 'vertical-width': (isHandset$ | async) }"></user-card>
+        </ng-container>
+      </div>
+    </mat-card>
+  </div>
+</div>

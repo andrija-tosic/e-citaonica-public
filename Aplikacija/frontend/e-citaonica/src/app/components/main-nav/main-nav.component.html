@@ -1,0 +1,249 @@
+<mat-menu #obavestenjaMenu xPosition="before">
+  <ng-container *ngFor="let obavestenje of (this.user$ | async)?.obavestenja">
+    <div class="space-between" style="margin-left: 1em">
+      <mat-icon color="primary">notifications</mat-icon>
+      <button
+        class="space-between"
+        style="gap: 0.5em"
+        mat-menu-item
+        (click)="pregledObavestenja(obavestenje)">
+        <span [innerHtml]="obavestenje.sadrzaj | sanitizeHtml"></span>
+        <span>
+          {{ obavestenje.datumIVreme | date: 'MMM d, y, HH:mm' }}
+        </span>
+      </button>
+      <button
+        (click)="$event.stopPropagation(); obrisiObavestenje(obavestenje)"
+        mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</mat-menu>
+
+<div class="container">
+  <mat-toolbar color="primary" class="mat-elevation-z5">
+    <button
+      #btnSideNavToggle
+      mat-icon-button
+      (click)="this.toggleSideNav()"
+      *ngIf="!(isHandset$ | async)">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <button
+      class="logo-button"
+      (click)="scrollToTop()"
+      [routerLink]="!(isHandset$ | async) ? ['/pocetna'] : []"
+      mat-button>
+      <div class="logo">
+        <img
+          src="../../../assets/e-citaonica-logo.svg"
+          class="e-citaonica-logo" />
+        <h1 class="logo-upper-left">e-Čitaonica</h1>
+      </div>
+    </button>
+    <span *ngIf="!(isHandset$ | async)" class="spacer"></span>
+
+    <div class="top-icons-container" *ngIf="!(isHandset$ | async)">
+      <ng-container *ngIf="(isHandset$ | async) === false">
+        <button mat-button routerLink="/pretraga">
+          <mat-icon class="material-icons-outlined">search</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container>
+        <button
+          *ngIf="(this.user$ | async)?.obavestenja?.length"
+          [matMenuTriggerFor]="obavestenjaMenu"
+          mat-icon-button>
+          <mat-icon
+            [matBadge]="(this.user$ | async)?.obavestenja?.length"
+            [matBadgeHidden]="(this.user$ | async)?.obavestenja?.length === 0"
+            matBadgeColor="warn">
+            notifications
+          </mat-icon>
+        </button>
+
+        <button
+          *ngIf="(this.user$ | async)?.obavestenja?.length === 0"
+          mat-icon-button>
+          <mat-icon> notifications_none </mat-icon>
+        </button>
+      </ng-container>
+
+      <button mat-button (click)="this.redirekcija('/korisnik/')">
+        <mat-icon
+          class="material-icons-outlined"
+          *ngIf="(this.user$ | async)?.slikaURL === ''"
+          >account_circle</mat-icon
+        >
+        <img
+          class="user-img"
+          *ngIf="(this.user$ | async)?.slikaURL !== ''"
+          [src]="(this.user$ | async)?.slikaURL" />
+
+        <ng-container *ngIf="!(isHandset$ | async)">
+          &nbsp; {{ (this.user$ | async)?.ime }}
+        </ng-container>
+      </button>
+    </div>
+  </mat-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav
+      #sideNav
+      class="sideNav"
+      [class.fullScreen]="isHandset$ | async"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false"
+      [fixedInViewport]="false"
+      class="outline-card-white">
+      <div
+        [class]="(isHandset$ | async) ? 'mobile-content' : 'desktop-content'">
+        <h2 class="sidenav-header space-between" style="align-items: flex-end">
+          Predmeti koje pratite
+
+          <a
+            *ngIf="
+              AUTORIZACIJA_DISABLED ||
+              (this.user$ | async)?.tip === 'administrator'
+            "
+            routerLink="/dodaj-predmet">
+            <button
+              style="margin-top: 0.2em; margin-right: 1em"
+              color="accent"
+              mat-stroked-button>
+              <mat-icon>add</mat-icon>
+              Dodaj
+            </button>
+          </a>
+        </h2>
+
+        <spinner
+          [showSpinner]="!(this.user$ | async)?.praceniPredmeti"></spinner>
+
+        <ng-container *ngFor="let god of [1, 2, 3, 4]">
+          <mat-expansion-panel
+            *ngIf="imaPredmetaUGodini(god)"
+            [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="godina-title"
+                ><h2>{{ god }}. godina</h2>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <ng-container *ngFor="let sem of [1, 2, 3, 4, 5, 6, 7, 8]">
+                <div *ngIf="imaPredmetaUSemestruIGodini(sem, god)">
+                  <h3>{{ sem }}. semestar</h3>
+                  <ng-container
+                    *ngFor="let p of $any(this.user$ | async)?.praceniPredmeti">
+                    <div
+                      *ngIf="
+                        p.pracen && p.semestar === sem && p.godina === god
+                      ">
+                      <button
+                        mat-button
+                        routerLink="/predmet/{{ p.id }}"
+                        class="predmet-btn"
+                        style="text-align: left"
+                        [color]="
+                          p!.id === (this.predmetService.predmet$ | async)?.id
+                            ? this.predmetColor
+                            : ''
+                        "
+                        [class]="
+                          p!.id === (this.predmetService.predmet$ | async)?.id
+                            ? 'mat-raised-button'
+                            : 'mat-flat-button'
+                        ">
+                        <h3 class="predmet-naziv">
+                          <predmet-icon [predmet]="p"></predmet-icon>
+                          <span class="text-wrap">
+                            {{ p.naziv }}
+                          </span>
+                        </h3>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </ng-container>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div
+        [class]="(isHandset$ | async) ? 'mobile-content' : 'desktop-content'">
+        <ng-content></ng-content>
+      </div>
+      <ng-container *ngIf="isHandset$ | async">
+        <div class="bottom-nav-container">
+          <footer>
+            <mat-toolbar class="bottom-nav">
+              <button
+                mat-flat-button
+                class="bottom-nav-btn"
+                (click)="this.toggleSideNav()">
+                <mat-icon>list</mat-icon>
+                <!-- <span class="btn-label">Predmeti</span> -->
+              </button>
+              <button
+                mat-flat-button
+                class="bottom-nav-btn"
+                routerLink="/pretraga"
+                routerLinkActive="active-link">
+                <mat-icon class="material-icons-outlined">search</mat-icon>
+                <!-- <span class="btn-label">Pretraga</span> -->
+              </button>
+              <button
+                (click)="scrollToTop()"
+                mat-flat-button
+                class="bottom-nav-btn"
+                routerLink="/pocetna"
+                routerLinkActive="active-link">
+                <mat-icon class="material-icons-outlined">home </mat-icon>
+                <!-- <span class="btn-label">Početna</span> -->
+              </button>
+              <button
+                mat-flat-button
+                routerLink="/obavestenja"
+                routerLinkActive="active-link"
+                class="bottom-nav-btn">
+                <mat-icon
+                  [matBadge]="(this.user$ | async)?.obavestenja?.length"
+                  [matBadgeHidden]="
+                    (this.user$ | async)?.obavestenja?.length === 0
+                  ">
+                  {{
+                    !(this.user$ | async)?.obavestenja ||
+                    (this.user$ | async)?.obavestenja?.length === 0
+                      ? 'notifications_none'
+                      : 'notifications'
+                  }}
+                </mat-icon>
+              </button>
+
+              <button
+                mat-flat-button
+                (click)="scrollToTop()"
+                class="bottom-nav-btn"
+                [routerLink]="'/korisnik/' + (this.user$ | async)?.id"
+                routerLinkActive="active-link">
+                <mat-icon
+                  *ngIf="(this.user$ | async)?.slikaURL === ''"
+                  class="material-icons-outlined">
+                  account_circle
+                </mat-icon>
+                <img
+                  class="user-img"
+                  *ngIf="(this.user$ | async)?.slikaURL !== ''"
+                  [src]="(this.user$ | async)?.slikaURL" />
+                <!-- <span class="btn-label">Profil</span> -->
+              </button>
+            </mat-toolbar>
+          </footer>
+        </div>
+      </ng-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

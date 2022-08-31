@@ -1,0 +1,11 @@
+<mat-chip-list>
+  <a
+    *ngFor="let dodatak of dodaci"
+    [href]="dodatak?.sadrzaj"
+    target="_blank"
+    [download]="dodatak?.naziv">
+    <mat-chip selected
+      ><mat-icon>file_download</mat-icon> {{ dodatak.naziv }}
+    </mat-chip>
+  </a>
+</mat-chip-list>
